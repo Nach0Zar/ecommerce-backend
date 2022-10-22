@@ -1,4 +1,4 @@
-export class Container{
+class Container{
     #iDCounter;
     #fs;
     #items
@@ -64,3 +64,4 @@ export class Container{
         this.#items = [];
     }
 };
+module.exports = Container
