@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Nach0Zar/ecommerce-backend/issues"
   },
-  "homepage": "https://github.com/Nach0Zar/ecommerce-backend#readme"
+  "homepage": "https://github.com/Nach0Zar/ecommerce-backend#readme",
+  "dependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
