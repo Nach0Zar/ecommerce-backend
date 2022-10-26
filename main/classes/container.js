@@ -59,8 +59,14 @@ class Container{
         (index !== -1) && this.#items.splice(index,1)
     }
 
+    getRandomProduct(){
+        return this.#items[Math.floor(Math.random()*this.#items.length)]
+    }
+    getLength(){
+        return this.#items.length;
+    }
     //deleteAll() : void
-    async deleteAll(){
+    deleteAll(){
         this.#items = [];
     }
 };

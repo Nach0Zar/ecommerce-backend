@@ -1,4 +1,5 @@
 const Container = require('./main/classes/container.js')
+const {server} = require('./server.js')
 const {connect} = require('./server.js')
 const fs = require('fs')
 let filepath = "./productos.txt";
@@ -42,15 +43,19 @@ async function testContainer(){
         thumbnail: "url3"
     }
     const container = new Container(filepath, fs, items, iDCounter);
-    await container.save(product1)
-    await container.save(product3)
-    console.log(container.getAll());
-    await container.save(product2)
-    await container.deleteAll()
-    console.log(container.getAll());
-    await container.save(product3)
-    console.log(container.getAll());
-    await container.saveDataOnFile();
+    // container.save(product1);
+    // container.save(product2);
+    // container.save(product3);
+    // await container.saveDataOnFile();
+    server.get('/productos',(petition, response) => {
+        response.json(container.getAll());
+    })
+    server.get('/cantidadProductos',(petition, response) => {
+        response.send(container.getLength().toString());
+    })
+    server.get('/productoRandom',(petition, response) => {
+        response.json(container.getRandomProduct());
+    })
 }
-testConnection()
-//testContainer();
+ testConnection();
+ testContainer();
