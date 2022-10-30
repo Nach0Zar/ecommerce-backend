@@ -1,9 +1,6 @@
 const express = require('express')
-const { serverSetUp } = require('./controllers/controllerProducts')
 const { routerApi } = require("./routers/routerApi.js")
 const app = express()
-//setup
-serverSetUp()
 
 //middlewares
 app.use(express.json())

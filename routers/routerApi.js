@@ -4,16 +4,19 @@ const { controllerGetAllProducts,
         controllerPutProductByID,
         controllerGetAmmountOfProducts,
         controllerGetRandomProduct,
-        controllerPostProduct
+        controllerPostProduct,
+        controllerDeleteProductByID
  } = require('../controllers/controllerProducts')
  
 const routerApi = express.Router();
 
 routerApi.get('/productos',controllerGetAllProducts);
-routerApi.get('/producto/:id',controllerGetProductByID)
-routerApi.put('/producto/:id',controllerPutProductByID)
-routerApi.get('/cantidadProductos',controllerGetAmmountOfProducts)
-routerApi.get('/productoRandom',controllerGetRandomProduct)
-routerApi.post('/producto',controllerPostProduct)
+routerApi.get('/productos/:id',controllerGetProductByID);
+routerApi.post('/productos',controllerPostProduct);
+routerApi.put('/productos/:id',controllerPutProductByID);
+routerApi.delete('/productos/:id', controllerDeleteProductByID);
+
+routerApi.get('/cantidadProductos',controllerGetAmmountOfProducts);
+routerApi.get('/productoRandom',controllerGetRandomProduct);
 
 exports.routerApi = routerApi;
