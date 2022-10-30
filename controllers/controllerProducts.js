@@ -80,7 +80,15 @@ function controllerGetAmmountOfProducts(req, response){
     response.send(container.getLength().toString());
 }
 function controllerGetRandomProduct(req, response){
-    response.json(container.getRandomProduct());
+    try{
+        //response.sendStatus(200) just sends status code
+        response.status(200);    
+        response.json(container.getRandomProduct());
+    }
+    catch{
+        response.status(500); //just sends status code
+        response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+    }
 }
 function controllerPostProduct(req, response){
     try{
