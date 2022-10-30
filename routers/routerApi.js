@@ -10,10 +10,12 @@ const { controllerGetAllProducts,
 const routerApi = express.Router();
 
 routerApi.get('/productos',controllerGetAllProducts);
-routerApi.get('/producto/:id',controllerGetProductByID)
-routerApi.put('/producto/:id',controllerPutProductByID)
-routerApi.get('/cantidadProductos',controllerGetAmmountOfProducts)
-routerApi.get('/productoRandom',controllerGetRandomProduct)
-routerApi.post('/producto',controllerPostProduct)
+routerApi.get('/productos/:id',controllerGetProductByID);
+routerApi.put('/productos/:id',controllerPutProductByID);
+routerApi.post('/productos',controllerPostProduct);
+routerApi.delete('/productos');
+
+routerApi.get('/cantidadProductos',controllerGetAmmountOfProducts);
+routerApi.get('/productoRandom',controllerGetRandomProduct);
 
 exports.routerApi = routerApi;
