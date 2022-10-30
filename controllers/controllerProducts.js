@@ -102,8 +102,8 @@ function controllerPostProduct(req, response){
     try{
         container.save(req.body)
         //response.sendStatus(200) just sends status code
-        response.status(200);    
-        response.json({mensaje: `el item con el id ${req.params.id} fue eliminado.`}) 
+        response.status(200);
+        response.json({mensaje: `el item ${req.body.title} fue agregado.`}) 
     }
     catch{
         response.status(500); //just sends status code
@@ -113,10 +113,15 @@ function controllerPostProduct(req, response){
 function controllerDeleteProductByID(req, response){
     try{
         if(+req.params.id){
-            container.deleteById(req.body);
-            response.status(200);    
-            response.json({mensaje: `el item con el id ${req.params.id} fue eliminado.`}) 
-    
+            if(!container.getById(+req.params.id)){
+                response.status(404);      
+                response.json({ mensaje: `no se encontró el producto con el id ${req.params.id}` });
+            } 
+            else{   
+                container.deleteById(req.params.id);
+                response.status(200);    
+                response.json({mensaje: `el item con el id ${req.params.id} fue eliminado.`}) 
+            }
         }
         else{
             response.status(404);      

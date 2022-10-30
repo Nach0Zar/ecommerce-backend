@@ -32,7 +32,7 @@ class Container{
     async save(product){
         const object = {
             title: product.title,
-            price: product.price,
+            price: +product.price,
             thumbnail: product.thumbnail,
             id: this.#iDCounter
         }
@@ -47,7 +47,13 @@ class Container{
         return (index !== -1) ? this.#items[index] : null
     }
 
-    modifyProductById(id, newItem){
+    modifyProductById(id, item){
+        const newItem = {
+            title: item.title,
+            price: +item.price,
+            thumbnail: item.thumbnail,
+            id: +id
+        }
         let index = this.#items.map((item => item.id)).indexOf(id);
         this.#items[index] = newItem;
     }
@@ -60,7 +66,7 @@ class Container{
     //deleteById(Number): void
     deleteById(id){
         //creates a new array (with the map function) containing only the IDs from the products, then indexes by ID and deletes the item 
-        let index = this.#items.map((item => item.id)).indexOf(id);
+        let index = this.#items.map((item => item.id)).indexOf(+id);
         (index !== -1) && this.#items.splice(index,1)
     }
 

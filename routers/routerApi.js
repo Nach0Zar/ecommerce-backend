@@ -12,8 +12,8 @@ const routerApi = express.Router();
 
 routerApi.get('/productos',controllerGetAllProducts);
 routerApi.get('/productos/:id',controllerGetProductByID);
-routerApi.put('/productos/:id',controllerPutProductByID);
 routerApi.post('/productos',controllerPostProduct);
+routerApi.put('/productos/:id',controllerPutProductByID);
 routerApi.delete('/productos/:id', controllerDeleteProductByID);
 
 routerApi.get('/cantidadProductos',controllerGetAmmountOfProducts);
