@@ -1,14 +1,20 @@
 const express = require('express')
-const server = express()
-// server.get('/welcome',(petition, response) => {
-//     response.send('<h1>hi</h1>')
-// })
-function connect(port = 8080){
-    return new Promise((resolve, reject)=>{
-        const serverConnecter = server.listen(port, err => {
-            (err) ? server.on("error", error => reject(err)) : resolve(serverConnecter)
-        })
-    })
-}
+const { serverSetUp } = require('./controllers/controllerProducts')
+const { routerApi } = require("./routers/routerApi.js")
+const app = express()
+//setup
+serverSetUp()
 
-module.exports = { connect, server }
+//middlewares
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
+
+//routes
+app.use('/api/',routerApi)
+
+//server port listener
+const port = 8080
+const server = app.listen(port,()=>{
+    console.log(`Successfully connected to port ${server.address().port}`)
+})
+server.on("error", err => console.log(err))
