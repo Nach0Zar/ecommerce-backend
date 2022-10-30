@@ -58,6 +58,18 @@ function controllerPostProduct(req, response){
         response.sendStatus(500) //just sends status code
     }
 }
+function controllerDeleteProductByID(req, response){
+    if(+req.params.id){
+        container.deleteById(req.body);
+        response.status(200);    
+        response.json({mensaje: `el item con el id ${req.params.id} fue eliminado.`}) 
+
+    }
+    else{
+        response.status(404);      
+        response.json({ mensaje: `el id ${req.params.id} es inválido.` });
+    }
+}
 
 exports.controllerGetAllProducts = controllerGetAllProducts;
 exports.controllerGetProductByID = controllerGetProductByID;
@@ -65,3 +77,4 @@ exports.controllerPutProductByID = controllerPutProductByID;
 exports.controllerGetAmmountOfProducts = controllerGetAmmountOfProducts
 exports.controllerGetRandomProduct = controllerGetRandomProduct;
 exports.controllerPostProduct = controllerPostProduct;
+exports.controllerDeleteProductByID = controllerDeleteProductByID;
