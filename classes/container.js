@@ -27,6 +27,7 @@ class Container{
         .then(()=>this.writeData(JSON.stringify(this.#items)))
         .catch(()=>console.log("Falló el borrado de archivo"));
     }
+
     //save(object) : void
     async save(product){
         const object = {
@@ -46,6 +47,10 @@ class Container{
         return (index !== -1) ? this.#items[index] : null
     }
 
+    modifyProductById(id, newItem){
+        let index = this.#items.map((item => item.id)).indexOf(id);
+        this.#items[index] = newItem;
+    }
 
     //getAll() : Object[]
     getAll(){

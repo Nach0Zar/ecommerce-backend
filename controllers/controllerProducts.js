@@ -17,31 +17,64 @@ function controllerSetup(){
     }
     return new Container(filepath, fs, items, iDCounter);
 }
-
 const container = controllerSetup();
 
-
 function controllerGetAllProducts (req, response){
-    response.json(container.getAll());
+    try{
+        response.status(200);
+        response.json(container.getAll());
+    }
+    catch{
+        response.status(500);      
+        response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+    }
 }
 function controllerGetProductByID(req, response){
-    if(+req.params.id){
-        const buscado = container.getById(+req.params.id);
-        if(!buscado){    
-            response.status(404);      
-            response.json({ mensaje: `no se encontró el producto con el id ${req.params.id}` });
+    try{
+        if(+req.params.id){
+            const buscado = container.getById(+req.params.id);
+            if(!buscado){    
+                response.status(404);      
+                response.json({ mensaje: `no se encontró el producto con el id ${req.params.id}` });
+            }
+            else{
+                response.status(200);
+                response.json(buscado);
+            }
         }
         else{
-            response.json(buscado);
+            response.status(404);      
+            response.json({ mensaje: `el id ${req.params.id} es inválido` });
         }
     }
-    else{
-        response.status(404);      
-        response.json({ mensaje: `el id ${req.params.id} es inválido` });
+    catch{
+        response.status(500);      
+        response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
 }
 function controllerPutProductByID(req, response){
-    response.json(req.params.id);
+    try{
+        if(+req.params.id){
+            const buscado = container.getById(+req.params.id);
+            if(!buscado){    
+                response.status(404);      
+                response.json({ mensaje: `no se encontró el producto con el id ${req.params.id}` });
+            }
+            else{
+                container.modifyProductById(+req.params.id, req.body)
+                response.status(200);
+                response.json(req.body);
+            }
+        }
+        else{
+            response.status(404);      
+            response.json({ mensaje: `el id ${req.params.id} es inválido` });
+        }
+    }
+    catch{
+        response.status(500);      
+        response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+    }
 }
 function controllerGetAmmountOfProducts(req, response){
     response.send(container.getLength().toString());
@@ -52,22 +85,31 @@ function controllerGetRandomProduct(req, response){
 function controllerPostProduct(req, response){
     try{
         container.save(req.body)
-        response.sendStatus(200) //just sends status code
+        //response.sendStatus(200) just sends status code
+        response.status(200);    
+        response.json({mensaje: `el item con el id ${req.params.id} fue eliminado.`}) 
     }
     catch{
-        response.sendStatus(500) //just sends status code
+        response.status(500); //just sends status code
+        response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
 }
 function controllerDeleteProductByID(req, response){
-    if(+req.params.id){
-        container.deleteById(req.body);
-        response.status(200);    
-        response.json({mensaje: `el item con el id ${req.params.id} fue eliminado.`}) 
-
+    try{
+        if(+req.params.id){
+            container.deleteById(req.body);
+            response.status(200);    
+            response.json({mensaje: `el item con el id ${req.params.id} fue eliminado.`}) 
+    
+        }
+        else{
+            response.status(404);      
+            response.json({ mensaje: `el id ${req.params.id} es inválido.` });
+        }
     }
-    else{
-        response.status(404);      
-        response.json({ mensaje: `el id ${req.params.id} es inválido.` });
+    catch{
+        response.status(500);      
+        response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
 }
 
