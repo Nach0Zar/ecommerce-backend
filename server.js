@@ -1,29 +1,31 @@
-const express = require('express')
-const { routerApi } = require("./routers/routerApi.js")
-const app = express()
-const fs = require('fs')
+const express = require('express');
+const { routerApi } = require("./routers/routerApi.js");
+const app = express();
+const { engine } = require('express-handlebars');
 
 //middlewares
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 //views
-app.set('views', './views');
-app.engine('ecommerce',async (filePath, options, callback)=>{
-        try{
-            const content = await fs.promises.readFile(filePath, 'utf-8');
-            const rendered = content.toString()
-            .replace('{{content}}', options.content)
-            return callback(null, rendered);
-        }
-        catch(err){
-            return callback(new Error (err));
-        }
+app.engine('handlebars', engine());
+app.set('view engine', 'handlebars');
+// app.set('views', './views');
+// app.engine('html',async (filePath, options, callback)=>{
+//         try{
+//             const content = await fs.promises.readFile(filePath, 'utf-8');
+//             const rendered = content.toString()
+//             .replace('{{content}}', options.content)
+//             return callback(null, rendered);
+//         }
+//         catch(err){
+//             return callback(new Error (err));
+//         }
             
-    })
-app.get('/',(req,res)=>{
-    res.render('index.ecommerce',{content: 'this is the content produced by the template'})
-})
+//     })
+// app.get('/',(req,res)=>{
+//     res.render('index.html',{content: 'this is the content produced by the template'})
+// })
 
 //routes
 app.use('/api/',routerApi);
