@@ -1,4 +1,4 @@
-const Container = require('../classes/container')
+const Container = require('../models/container')
 const fs = require('fs')
 function controllerSetup(){
     let filepath = "./productos.txt";
