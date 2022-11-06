@@ -18,7 +18,6 @@ function controllerSetup(){
     return new Container(filepath, fs, items, iDCounter);
 }
 const container = controllerSetup();
-
 function controllerGetAllProducts (req, response){
     try{
         response.status(200);
@@ -133,7 +132,6 @@ function controllerDeleteProductByID(req, response){
         response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
 }
-
 exports.controllerGetAllProducts = controllerGetAllProducts;
 exports.controllerGetProductByID = controllerGetProductByID;
 exports.controllerPutProductByID = controllerPutProductByID;

@@ -1,0 +1,32 @@
+<div class="container">
+    <h2 style="margin: auto auto;">Product List</h2>
+    {{#if productsExist}}
+    <div id="productList">
+        {{#each products}}
+        <div class="container item">
+            <img class="imgThumbnail" src={{this.thumbnail}}>
+            <h3>
+                {{this.title}}
+            </h3>
+            <h4>
+                ${{this.price}}
+            </h4>
+        </div>
+        {{/each}}
+    </div>
+    {{else}}
+    <h3>No product was uploaded</h3>
+    {{/if}}
+</div>
+<style>
+    .item{
+        display: flex;
+        flex-flow: column nowrap;
+        max-width: 200px;
+        margin: 20px auto;
+    }
+    .imgThumbnail{
+        max-width: 100px;
+        max-height: fit-content;
+    }
+</style>
