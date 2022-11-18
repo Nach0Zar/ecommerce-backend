@@ -1,7 +1,7 @@
-const Container = require('../models/container')
+const ProductContainer = require('../models/productContainer')
 const fs = require('fs')
 function controllerSetup(){
-    let filepath = "./productos.txt";
+    let filepath = __dirname+"/../productos.txt";
     let iDCounter;
     let items;
     //if file doesn't exists or if it is empty
@@ -15,9 +15,9 @@ function controllerSetup(){
         //gets the highest ID and assigns the counter that value+1 to be the next ID to assign.
         iDCounter = Math.max(...items.map(item => item.id))+1;
     }
-    return new Container(filepath, fs, items, iDCounter);
+    return new ProductContainer(filepath, fs, items, iDCounter);
 }
-const container = controllerSetup();
+const productContainer = controllerSetup();
 function controllerGetAllProducts (req, response){
     try{
         response.status(200);
@@ -139,3 +139,4 @@ exports.controllerGetAmmountOfProducts = controllerGetAmmountOfProducts
 exports.controllerGetRandomProduct = controllerGetRandomProduct;
 exports.controllerPostProduct = controllerPostProduct;
 exports.controllerDeleteProductByID = controllerDeleteProductByID;
+exports.productContainer = productContainer;
