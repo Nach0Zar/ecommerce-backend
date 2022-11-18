@@ -1,4 +1,4 @@
-const Container = require('../models/container')
+const ProductContainer = require('../models/container')
 const fs = require('fs')
 function controllerSetup(){
     let filepath = "./productos.txt";
@@ -15,7 +15,7 @@ function controllerSetup(){
         //gets the highest ID and assigns the counter that value+1 to be the next ID to assign.
         iDCounter = Math.max(...items.map(item => item.id))+1;
     }
-    return new Container(filepath, fs, items, iDCounter);
+    return new ProductContainer(filepath, fs, items, iDCounter);
 }
 const container = controllerSetup();
 function landingPage(req, res){
@@ -23,7 +23,6 @@ function landingPage(req, res){
 }
 function postProduct(req, res){
     container.save(req.body);
-    console.log(req.body)
     res.redirect('/');
 }
 function getProducts(req, res){
