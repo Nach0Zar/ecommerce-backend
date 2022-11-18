@@ -1,4 +1,4 @@
-class Container{
+class MessageContainer{
     #iDCounter;
     #fs;
     #items;
@@ -25,15 +25,16 @@ class Container{
         .catch(()=>console.log("Falló el borrado de archivo"));
     }
     //save(object) : void
-    async save(product){
+    async save(message){
         const object = {
-            title: product.title,
-            price: +product.price,
-            thumbnail: product.thumbnail,
+            date: message.date,
+            author: message.author,
+            text: message.text,
             id: this.#iDCounter
         };
         this.#iDCounter++;
         this.#items.push(object);
+        await this.saveDataOnFile();
     }
     //getById(number) : Object
     getById(id){
@@ -61,9 +62,6 @@ class Container{
         let index = this.#items.map((item => item.id)).indexOf(+id);
         (index !== -1) && this.#items.splice(index,1);
     }
-    getRandomProduct(){
-        return this.#items[Math.floor(Math.random()*this.#items.length)];
-    }
     getLength(){
         return this.#items.length;
     }
@@ -72,4 +70,4 @@ class Container{
         this.#items = [];
     }
 };
-module.exports = Container
+module.exports = MessageContainer
