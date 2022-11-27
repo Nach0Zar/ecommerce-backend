@@ -2,9 +2,23 @@ const socket = io();
 function showMessages(messages) {
     const messageList = document.getElementById('messageList');
     let messagesHTML;
+    //sort by time
+    messages.sort((a, b) => {
+        let fa = a.dateMsg.toLowerCase(),
+            fb = b.dateMsg.toLowerCase();
+    
+        if (fa < fb) {
+            return -1;
+        }
+        if (fa > fb) {
+            return 1;
+        }
+        return 0;
+    });
+    console.log(messages)
     if (messages.length > 0){
-        const messagesList = messages.map(({ date, author, text }) => {
-            return `<li>${date} - ${author}: ${text}</li>`
+        const messagesList = messages.map(({ dateMsg, author, message }) => {
+            return `<li>${dateMsg} - ${author}: ${message}</li>`
         })
         messagesHTML = `
         <ul>
@@ -26,9 +40,10 @@ buttonSendMessage.addEventListener('click', e => {
     if (authorInput.value && messageInput.value) {
         const message = {
             author: authorInput.value,
-            text: messageInput.value,
-            date: new Date().toLocaleDateString()
+            message: messageInput.value,
+            dateMsg: new Date().toLocaleString()
         }
+        console.log(message)
         socket.emit('newMessage', message);
     } else {
         alert('Tu mensaje o tu nombre de usuario están vacios. Por favor rellenar los datos correctamente');
