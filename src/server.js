@@ -10,17 +10,19 @@ const app = express();
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 //socket.io
-io.on('connection',(socket)=>{
-    const messages = messageContainer.getAll();
+io.on('connection',async (socket)=>{
+    let messages = await messageContainer.getAll();
     socket.emit('updateMessages', messages);
-    socket.on('newMessage', (message)=>{
-        messageContainer.save(message);
+    socket.on('newMessage', async(message)=>{
+        await messageContainer.save(message);
+        messages = await messageContainer.getAll();
         io.sockets.emit('updateMessages', messages);
     });
-    const products = productContainer.getAll();
+    let products = await productContainer.getAll();
     socket.emit('updateProducts', products);
-    socket.on('newProduct', (product)=>{
-        productContainer.save(product)
+    socket.on('newProduct', async (product)=>{
+        await productContainer.save(product);
+        products = await productContainer.getAll();
         io.sockets.emit('updateProducts', products);
     });
 });

@@ -5,8 +5,8 @@ const { controllerGetAllMessages,
 const { controllerGetAllProducts,
         controllerGetProductByID,
         controllerPutProductByID,
-        controllerGetAmmountOfProducts,
-        controllerGetRandomProduct,
+        // controllerGetAmmountOfProducts,
+        // controllerGetRandomProduct,
         controllerPostProduct,
         controllerDeleteProductByID
  } = require('../controllers/controllerProducts');
@@ -16,8 +16,8 @@ routerApi.get('/productos/:id',controllerGetProductByID);
 routerApi.post('/productos',controllerPostProduct);
 routerApi.put('/productos/:id',controllerPutProductByID);
 routerApi.delete('/productos/:id', controllerDeleteProductByID);
-routerApi.get('/cantidadProductos',controllerGetAmmountOfProducts);
-routerApi.get('/productoRandom',controllerGetRandomProduct);
+// routerApi.get('/cantidadProductos',controllerGetAmmountOfProducts);
+// routerApi.get('/productoRandom',controllerGetRandomProduct);
 routerApi.get('/messages',controllerGetAllMessages);
 routerApi.post('/messages',controllerPostMessage);
 exports.routerApi = routerApi;
