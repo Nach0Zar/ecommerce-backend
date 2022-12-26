@@ -95,7 +95,8 @@ function controllerGetProductsFaker(req, response){
         let fakeProduct = {
             title: faker.word.noun(),
             price: +faker.datatype.number(),
-            thumbnail: faker.internet.domainName()
+            thumbnail: faker.internet.domainName(),
+            id: i
         };
         fakeProducts.push(fakeProduct)
     }
