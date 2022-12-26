@@ -1,3 +1,6 @@
+const { faker } = require('@faker-js/faker');
+faker.locale = 'es'
+
 //this is the productContainer using memory and FS
 const ProductContainer = require('../models/productContainer')
 const fs = require('fs')
@@ -87,7 +90,17 @@ function controllerPutProductByID(req, response){
     }
 }
 function controllerGetProductsFaker(req, response){
-
+    let fakeProducts = []
+    for (let i = 0; i < 5; i++){
+        let fakeProduct = {
+            title: faker.word.noun(),
+            price: +faker.datatype.number(),
+            thumbnail: faker.internet.domainName()
+        };
+        fakeProducts.push(fakeProduct)
+    }
+    response.status(200);
+    response.json(fakeProducts);
 }
 // function controllerGetAmmountOfProducts(req, response){
 //     try{
