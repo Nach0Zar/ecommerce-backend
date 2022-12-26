@@ -14,6 +14,7 @@ io.on('connection',async (socket)=>{
     let messages = await messageContainer.getAll();
     socket.emit('updateMessages', messages);
     socket.on('newMessage', async(message)=>{
+        console.log(message)
         await messageContainer.save(message);
         messages = await messageContainer.getAll();
         io.sockets.emit('updateMessages', messages);

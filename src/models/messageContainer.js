@@ -27,11 +27,12 @@ class MessageContainer{
     //save(object) : void
     async save(message){
         const object = {
-            date: message.date,
+            dateMsg: message.dateMsg,
             author: message.author,
-            text: message.text,
+            message: message.message,
             id: this.#iDCounter
         };
+        console.log(object)
         this.#iDCounter++;
         this.#items.push(object);
         await this.saveDataOnFile();

@@ -3,19 +3,18 @@ function showMessages(messages) {
     const messageList = document.getElementById('messageList');
     let messagesHTML;
     //sort by time
-    messages.sort((a, b) => {
-        let fa = a.dateMsg.toLowerCase(),
-            fb = b.dateMsg.toLowerCase();
+    // messages.sort((a, b) => {
+    //     let fa = a.dateMsg.toLowerCase(),
+    //         fb = b.dateMsg.toLowerCase();
     
-        if (fa < fb) {
-            return -1;
-        }
-        if (fa > fb) {
-            return 1;
-        }
-        return 0;
-    });
-    console.log(messages)
+    //     if (fa < fb) {
+    //         return -1;
+    //     }
+    //     if (fa > fb) {
+    //         return 1;
+    //     }
+    //     return 0;
+    // });
     if (messages.length > 0){
         const messagesList = messages.map(({ dateMsg, author, message }) => {
             return `<li>${dateMsg} - ${author}: ${message}</li>`
@@ -43,7 +42,6 @@ buttonSendMessage.addEventListener('click', e => {
             message: messageInput.value,
             dateMsg: new Date().toLocaleString()
         }
-        console.log(message)
         socket.emit('newMessage', message);
     } else {
         alert('Tu mensaje o tu nombre de usuario están vacios. Por favor rellenar los datos correctamente');
