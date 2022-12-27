@@ -2,23 +2,15 @@ const socket = io();
 function showMessages(messages) {
     const messageList = document.getElementById('messageList');
     let messagesHTML;
-    //sort by time
-    messages.sort((a, b) => {
-        let fa = a.dateMsg.toLowerCase(),
-            fb = b.dateMsg.toLowerCase();
-    
-        if (fa < fb) {
-            return -1;
-        }
-        if (fa > fb) {
-            return 1;
-        }
-        return 0;
-    });
-    console.log(messages)
-    if (messages.length > 0){
-        const messagesList = messages.map(({ dateMsg, author, message }) => {
-            return `<li>${dateMsg} - ${author}: ${message}</li>`
+    if (messages.mensajes.length > 0){
+        //normalizer
+        const authorSchema = new normalizr.schema.Entity('authors');
+        const messageSchema = new normalizr.schema.Entity('messages', {
+            author: authorSchema
+        });
+        const messagesList = messages.mensajes.map((mensaje)=>{
+            const denormalizedMessage = normalizr.denormalize(mensaje.result, messageSchema, mensaje.entities);
+            return `<li>${denormalizedMessage.dateMsg} - ${denormalizedMessage.author.id} - ${denormalizedMessage.author.firstName} ${denormalizedMessage.author.lastName} : ${denormalizedMessage.message}</li>` 
         })
         messagesHTML = `
         <ul>
@@ -30,20 +22,36 @@ function showMessages(messages) {
     }
     messageList.innerHTML = messagesHTML
 }
-socket.on('updateMessages', (messages) => {
+socket.on('updateMessages', (messages, caracteres) => {
     showMessages(messages);
+    console.log("La cantidad de caracteres de la lista SIN normalizar es de "+caracteres[0]);
+    console.log("La cantidad de caracteres de la lista normalizada es de "+caracteres[1]);
+    const porcentaje = 100-((caracteres[0]*100)/caracteres[1])
+    console.log("El porcentaje de compresión es de %"+porcentaje);
 });
 const buttonSendMessage = document.getElementById('buttonSendMessage');
 buttonSendMessage.addEventListener('click', e => {
-    const authorInput = document.getElementById('authorInput');
+    const emailInput = document.getElementById('emailInput');
+    const firstNameInput = document.getElementById('firstNameInput');
+    const lastNameInput = document.getElementById('lastNameInput');
+    const ageInput = document.getElementById('ageInput');
+    const aliasInput = document.getElementById('aliasInput');
+    const avatarInput = document.getElementById('avatarInput');
     const messageInput = document.getElementById('messageInput');
-    if (authorInput.value && messageInput.value) {
+    if (emailInput.value && messageInput.value && firstNameInput.value && lastNameInput.value && ageInput.value && aliasInput.value && avatarInput.value) {
+        const author = {
+            id: emailInput.value,
+            firstName: firstNameInput.value,
+            lastName: lastNameInput.value,
+            age: +ageInput.value,
+            avatar: avatarInput.value,
+            alias: aliasInput.value,
+        }
         const message = {
-            author: authorInput.value,
+            author: author,
             message: messageInput.value,
             dateMsg: new Date().toLocaleString()
         }
-        console.log(message)
         socket.emit('newMessage', message);
     } else {
         alert('Tu mensaje o tu nombre de usuario están vacios. Por favor rellenar los datos correctamente');
