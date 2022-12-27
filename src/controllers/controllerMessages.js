@@ -26,7 +26,7 @@ const messageContainer = controllerSetup();
 function controllerGetAllMessages (req, response){
     try{
         response.status(200);
-        response.json(messageContainer.getAll());
+        response.json(messageContainer.getMessageList());
     }
     catch{
         response.status(500);      

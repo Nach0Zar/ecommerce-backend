@@ -12,12 +12,13 @@ const io = new IOServer(httpServer);
 //socket.io
 io.on('connection',async (socket)=>{
     let messages = await messageContainer.getAll();
-    socket.emit('updateMessages', messages);
+    let cantidades = await messageContainer.getCantidadesCaracteresListas()
+    socket.emit('updateMessages', messages, cantidades);
     socket.on('newMessage', async(message)=>{
-        console.log(message)
         await messageContainer.save(message);
         messages = await messageContainer.getAll();
-        io.sockets.emit('updateMessages', messages);
+        let cantidades = await messageContainer.getCantidadesCaracteresListas()
+        io.sockets.emit('updateMessages', messages, cantidades);
     });
     let products = await productContainer.getAll();
     socket.emit('updateProducts', products);
