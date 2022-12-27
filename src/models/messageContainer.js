@@ -1,3 +1,5 @@
+const { normalize, denormalize, schema } = require("normalizr")
+const util = require('util')
 class MessageContainer{
     #iDCounter;
     #fs;
@@ -25,11 +27,23 @@ class MessageContainer{
         .catch(()=>console.log("Falló el borrado de archivo"));
     }
     //save(object) : void
+    normalizeMessage(message){
+        //normalizer
+        const authorSchema = new schema.Entity('authors');
+        const messageSchema = new schema.Entity('messages', {
+            author: authorSchema
+        });
+        const messageNormalized = normalize(message, messageSchema);
+        return (messageNormalized)
+    }
+    print(objeto) {
+        console.log(util.inspect(objeto, false, 12, true))
+      }
     async save(message){
         const object = {
-            date: message.date,
+            dateMsg: message.dateMsg,
             author: message.author,
-            text: message.text,
+            message: message.message,
             id: this.#iDCounter
         };
         this.#iDCounter++;
@@ -54,6 +68,21 @@ class MessageContainer{
     }
     //getAll() : Object[]
     getAll(){
+        let messages = {
+            id: 'mensajes',
+            mensajes: []
+        }
+        this.#items.forEach(item => {
+            messages.mensajes.push(this.normalizeMessage(item))
+        });
+        return messages;
+    }
+    async getCantidadesCaracteresListas(){
+        const caracteresLista = JSON.stringify(this.getMessageList()).length
+        const caracteresListaNormalizada = JSON.stringify(this.getAll()).length
+        return ([caracteresLista,caracteresListaNormalizada])
+    }
+    getMessageList(){
         return this.#items;
     }
     //deleteById(Number): void

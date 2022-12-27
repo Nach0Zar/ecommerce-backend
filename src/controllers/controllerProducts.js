@@ -1,28 +1,31 @@
+const { faker } = require('@faker-js/faker');
+faker.locale = 'es'
+
 //this is the productContainer using memory and FS
-//const ProductContainer = require('../models/productContainer')
-//const fs = require('fs')
-// function controllerSetup(){
-//     let filepath = __dirname+"/../productos.txt";
-//     let iDCounter;
-//     let items;
-//     //if file doesn't exists or if it is empty
-//     if(!fs.existsSync(filepath) || fs.readFileSync(filepath,'utf8').length == 0){
-//         iDCounter = 0;
-//         items = [];
-//     }
-//     else{
-//         //loads previous items to the list
-//         items = JSON.parse(fs.readFileSync(filepath,'utf8'))
-//         //gets the highest ID and assigns the counter that value+1 to be the next ID to assign.
-//         iDCounter = Math.max(...items.map(item => item.id))+1;
-//     }
-//     return new ProductContainer(filepath, fs, items, iDCounter);
-// }
-const ContainerDB = require("../models/ContainerDB");
-//this is the productContainer using DB
+const ProductContainer = require('../models/productContainer')
+const fs = require('fs')
 function controllerSetup(){
-    return new ContainerDB('products');
+    let filepath = __dirname+"/../productos.txt";
+    let iDCounter;
+    let items;
+    //if file doesn't exists or if it is empty
+    if(!fs.existsSync(filepath) || fs.readFileSync(filepath,'utf8').length == 0){
+        iDCounter = 0;
+        items = [];
+    }
+    else{
+        //loads previous items to the list
+        items = JSON.parse(fs.readFileSync(filepath,'utf8'))
+        //gets the highest ID and assigns the counter that value+1 to be the next ID to assign.
+        iDCounter = Math.max(...items.map(item => item.id))+1;
+    }
+    return new ProductContainer(filepath, fs, items, iDCounter);
 }
+// const ContainerDB = require("../models/ContainerDB");
+// //this is the productContainer using DB
+// function controllerSetup(){
+//     return new ContainerDB('products');
+// }
 const productContainer = controllerSetup();
 function controllerGetAllProducts (req, response){
     try{
@@ -85,6 +88,20 @@ function controllerPutProductByID(req, response){
         response.status(500);      
         response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
+}
+function controllerGetProductsFaker(req, response){
+    let fakeProducts = []
+    for (let i = 0; i < 5; i++){
+        let fakeProduct = {
+            title: faker.word.noun(),
+            price: +faker.datatype.number(),
+            thumbnail: faker.internet.domainName(),
+            id: i
+        };
+        fakeProducts.push(fakeProduct)
+    }
+    response.status(200);
+    response.json(fakeProducts);
 }
 // function controllerGetAmmountOfProducts(req, response){
 //     try{
@@ -155,4 +172,5 @@ exports.controllerPutProductByID = controllerPutProductByID;
 // exports.controllerGetRandomProduct = controllerGetRandomProduct;
 exports.controllerPostProduct = controllerPostProduct;
 exports.controllerDeleteProductByID = controllerDeleteProductByID;
+exports.controllerGetProductsFaker = controllerGetProductsFaker;
 exports.productContainer = productContainer;
