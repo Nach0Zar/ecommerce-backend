@@ -100,3 +100,19 @@ buttonSendProduct.addEventListener('click', e => {
         alert('Tu producto no fue llenado correctamente.');
     }
 });
+const logoutForm = document.getElementById('logoutForm');
+const loginForm = document.getElementById('loginForm');
+async function sessionData(){
+    const session = await fetch('/api/sessionInfo', {method: 'GET'})
+    const sessionData = (await session.json())
+    if(sessionData.username){
+        console.log(sessionData.username)
+        loginForm.hidden = true
+        const bienvenidaUsuario = document.getElementById('bienvenidaUsuario')
+        bienvenidaUsuario.innerText = "Bienvenido " + sessionData.username
+    }
+    else{
+        logoutForm.hidden = true
+    }
+}
+sessionData()
