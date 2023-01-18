@@ -12,8 +12,38 @@
 </head>
 <body>
     <h1>Ecommerce</h1>
+    <form action="/api/login" method="post" id="loginForm">
+        <div id="formHandler">
+            <h2>Enter User data</h2>
+            <br>
+            <div class="container" id="formContainer">
+                <div>
+                    <label for="username"><b>Username</b></label>
+                    <input id="usernameInput" type="text" name="username">
+                </div>
+                <div>
+                    <label for="password"><b>Password</b></label>
+                    <input id="passwordInput" type="password" name="password">
+                </div>
+                <div id="buttonContainer">
+                    <button id="buttonLogin">Login</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <br>
+    <form action="/api/logout" method="post" id="logoutForm">
+        <div id="formHandler">
+            <h2 id="bienvenidaUsuario"></h2>
+            <br>
+            <div id="buttonContainer">
+                <button id="buttonLogout">Logout</button>
+            </div>
+        </div>
+    </form>
+    <br>
     <div id="formHandler">
-        <h2>Enter product data</h1>
+        <h2>Enter product data</h2>
         <br>
         <div class="container" id="formContainer">
             <div>
@@ -33,8 +63,6 @@
             </div>
         </div>
     </div>
-</body>
-
 <div class="container" id="listContainer">
     <h2 style="margin: auto auto;">Product List</h2>
     <div id="productList"></div>
@@ -66,6 +94,7 @@
     </div>
     <div id="messageList"></div>
 </div>
+</body>
 <script src="js/index.js"></script>
 <style>
     #formHandler{
