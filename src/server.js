@@ -38,7 +38,7 @@ app.use(express.static('public'));
 app.use(session({
     store: MongoStore.create({
         mongoUrl: `mongodb+srv://nachocoderhouse:passwordpassword@cluster0.hmqkdpj.mongodb.net/coderhouse`,
-        ttl: 60
+        ttl: 60 * 10
     }),
     secret: 'nachocoderhouse',
     resave: false,
