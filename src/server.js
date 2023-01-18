@@ -1,4 +1,6 @@
 const express = require('express');
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const { routerApi } = require("./routers/routerApi.js");
 //const { routerWeb } = require("./routers/routerWeb.js");
 //const { engine } = require('express-handlebars');
@@ -32,6 +34,16 @@ io.on('connection',async (socket)=>{
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
+//mongo
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl: `mongodb+srv://nachocoderhouse:passwordpassword@cluster0.hmqkdpj.mongodb.net/?retryWrites=true&w=majority`,
+        ttl: 60
+    }),
+    secret: 'nachocoderhouse',
+    resave: false,
+    saveUninitialized: false
+}))
 //views
 //app.engine('handlebars', engine());
 //app.set('view engine', 'handlebars');
