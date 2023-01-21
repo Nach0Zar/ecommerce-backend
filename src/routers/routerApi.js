@@ -42,5 +42,20 @@ routerApi.get('/sessionInfo',(req, res)=>{
         res.json({username: null})
     }
     res.status(200)
-})
+});
+routerApi.get('/login',(req, res)=>{
+    res.render('login', {}, (err, html) => {
+        (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
+    });
+});
+routerApi.get('/register',(req, res)=>{
+    res.render('register', {}, (err, html) => {
+        (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
+    });
+});
+routerApi.get('/error', (req, res)=>{
+    res.render('error', {}, (err, html) => {
+        (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
+    });
+});
 exports.routerApi = routerApi;

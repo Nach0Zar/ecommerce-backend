@@ -1,0 +1,30 @@
+#formHandler{
+    border-radius: 50px;
+    background-color:grey;
+}
+#formContainer{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    vertical-align: center;
+}
+#formHandler>*, #formContainer>*{
+    margin: auto auto;
+    display: flex;
+    justify-content: center;
+    vertical-align: center;
+}
+#buttonContainer{
+    display: flex;
+    justify-content: center;
+}
+.item{
+    display: flex;
+    flex-flow: column nowrap;
+    max-width: 200px;
+    margin: 20px auto;
+}
+.imgThumbnail{
+    max-width: 100px;
+    max-height: fit-content;
+}

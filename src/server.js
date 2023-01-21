@@ -4,6 +4,7 @@ const MongoStore = require('connect-mongo');
 const { routerApi } = require("./routers/routerApi.js");
 //const { routerWeb } = require("./routers/routerWeb.js");
 //const { engine } = require('express-handlebars');
+const { ejs } = require('ejs')
 const { Server: HttpServer } = require('http');
 const { Server: IOServer } = require('socket.io');
 const { messageContainer } = require('./controllers/controllerMessages.js');
@@ -44,9 +45,11 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }))
-//views
+//views handlebars
 //app.engine('handlebars', engine());
 //app.set('view engine', 'handlebars');
+//views 
+app.set('view engine', 'ejs');
 //routes
 app.use('/api/',routerApi); //to be used in the REST Api version
 //app.use('/', routerWeb);    //to be used with handlebars

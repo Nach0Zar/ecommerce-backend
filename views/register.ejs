@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <form action="/api/login" method="post" id="loginForm">
+        <div id="formHandler">
+            <h2>Enter User data</h2>
+            <br>
+            <div class="container" id="formContainer">
+                <div>
+                    <label for="username"><b>Username</b></label>
+                    <input id="usernameInput" type="text" name="username">
+                </div>
+                <div>
+                    <label for="password1"><b>Password</b></label>
+                    <input id="passwordInput1" type="password" name="password1">
+                </div>
+                <div>
+                    <label for="password2"><b>Retype Password</b></label>
+                    <input id="passwordInput2" type="password" name="password2">
+                </div>
+                <div id="buttonContainer">
+                    <button id="buttonLogin">Login</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+<style>
+    #formHandler{
+        border-radius: 50px;
+        background-color:grey;
+    }
+    #formContainer{
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        vertical-align: center;
+    }
+    #formHandler>*, #formContainer>*{
+        margin: auto auto;
+        display: flex;
+        justify-content: center;
+        vertical-align: center;
+    }
+    #buttonContainer{
+        display: flex;
+        justify-content: center;
+    }
+    .item{
+        display: flex;
+        flex-flow: column nowrap;
+        max-width: 200px;
+        margin: 20px auto;
+    }
+    .imgThumbnail{
+        max-width: 100px;
+        max-height: fit-content;
+    }
+</style>
+</html>
