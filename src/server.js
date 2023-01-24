@@ -9,9 +9,12 @@ const { Server: HttpServer } = require('http');
 const { Server: IOServer } = require('socket.io');
 const { messageContainer } = require('./controllers/controllerMessages.js');
 const { productContainer } = require('./controllers/controllerProducts.js');
+const passport = require('passport');
+const { Strategy: LocalStrategy } = require('passport-local');
 const app = express();
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
+const { sessionSecret } = require('./config/sessionConfig');
 //socket.io
 io.on('connection',async (socket)=>{
     let messages = await messageContainer.getAll();
