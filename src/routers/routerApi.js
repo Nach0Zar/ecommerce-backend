@@ -23,8 +23,8 @@ routerApi.get('/productos-test', controllerGetProductsFaker);
 routerApi.get('/messages',controllerGetAllMessages);
 routerApi.post('/messages',controllerPostMessage);
 routerApi.get('/sessionInfo',(req, res)=>{
-    if(req.session.username){
-        res.json(req.session)
+    if(req.cookies.email){
+        res.json({username: req.cookies.email})
     }
     else{
         res.json({username: null})

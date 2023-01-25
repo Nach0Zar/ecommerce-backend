@@ -20,8 +20,8 @@ class userContainerDB{
         }
         return (this.parseData(item[0]))
     }
-    async getItemByName(userName) {
-        let criterio = { username: userName };
+    async getItemByEmail(userEmail) {
+        let criterio = { email: userEmail };
         let item = await this.items.find(criterio).toArray();
         if(!item.toString()){//to check if no doc was found
             return null;

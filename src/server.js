@@ -44,7 +44,7 @@ io.on('connection',async (socket)=>{
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
-app.use(cookieParser())
+app.use(cookieParser());
 //mongo
 app.use(session({
     //mongo sessions
@@ -55,7 +55,7 @@ app.use(session({
     cookie: {
         httpOnly: false,
         secure: false,
-        maxAge: 60 * 10
+        maxAge: 10 * 60 * 1000
     },
     secret: SESSION_SECRET,
     resave: false,
@@ -71,7 +71,7 @@ passport.deserializeUser((id, done) => {
 });
 app.use(passport.session());
 app.post('/api/login',
-    passport.authenticate('local-login', { failWithError: false, failureRedirect: '/api/error' }),
+    passport.authenticate('local-login', { failWithError: true, failureRedirect: '/api/error' }),
     loginUser);
 app.post('/api/register',registerUser);
 app.post('/api/logout',(req, res)=>{
@@ -80,7 +80,7 @@ app.post('/api/logout',(req, res)=>{
     //     else res.status(500)
     // })
     // res.redirect('/')
-    res.clearCookie('id')
+    res.clearCookie('email')
     res.sendStatus(200)
 });
 //views handlebars

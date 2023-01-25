@@ -18,24 +18,36 @@ function deserializeUserMongo(id, done){
 function registerUser(req, res){
     if(req.body.password1 === req.body.password2){
         const user = {
-            username: req.body.username,
+            email: req.body.username,
             password: req.body.password1
         }
         userController.then((container)=>{
-            container.save(user).then(()=>{
-                res.status(201).redirect('/');
+            container.getItemByEmail(user.email).then((userFound)=>{
+                if(userFound === null){
+                    container.save(user).then(()=>{
+                        res.status(201).redirect('/');
+                    })
+                }
+                else{
+                    res.status(500).redirect('/api/error')
+                }
             })
         })
     }
     else{
-        res.sendStatus(500);
+        res.status(500).redirect('/api/error')
     }
 }
 function loginUser(req, res) {
     userController.then((container)=>{
-        container.getItemByName(req.body.username).then((item)=>{
-            res.cookie('id', item.id, {maxAge: 10000})
-            res.status(200).redirect('/')
+        container.getItemByEmail(req.body.username).then((item)=>{
+            if(item){
+                res.cookie('email', item.email, {maxAge: 10000})
+                res.status(200).redirect('/')
+            }
+            else{
+                res.status(500).redirect('/api/error')
+            }
         })
     })
 
@@ -44,7 +56,7 @@ passport.use('local-login', new LocalStrategy(
     {},
     (username, password, done) => {
         userController.then((container)=> {
-            container.getItemByName(username).then((user)=>{
+            container.getItemByEmail(username).then((user)=>{
                 if (user?.password !== password) {
                     return done(null, false)
                 }
