@@ -17,7 +17,6 @@ const { SESSION_SECRET } = require('./config/sessionConfig');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const { 
-    userController, 
     serializeUserMongo, 
     deserializeUserMongo, 
     registerUser,

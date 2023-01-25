@@ -1,4 +1,3 @@
-const { randomUUID } = require('crypto')
 const { mongoDBSetup } = require('../config/mongoDBConfig.js');
 const { ObjectID } = require('mongodb');
 class userContainerDB{
@@ -7,7 +6,7 @@ class userContainerDB{
     }
     async setUp(){
         const mongoDatabase = await mongoDBSetup();
-        this.items = mongoDatabase.collection("Users");
+        this.items = mongoDatabase.collection("users");
     }
     async save(object) {
         delete object.id;//removes the object ID
@@ -15,6 +14,14 @@ class userContainerDB{
     }
     async getItemByID(idItem) {
         let criterio = { _id: ObjectID(idItem) };
+        let item = await this.items.find(criterio).toArray();
+        if(!item.toString()){//to check if no doc was found
+            return null;
+        }
+        return (this.parseData(item[0]))
+    }
+    async getItemByName(userName) {
+        let criterio = { username: userName };
         let item = await this.items.find(criterio).toArray();
         if(!item.toString()){//to check if no doc was found
             return null;
