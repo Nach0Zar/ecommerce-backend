@@ -1,6 +1,8 @@
 const userContainerDB = require('../models/usersContainer.js')
 const passport = require('passport');
 const { Strategy: LocalStrategy } = require('passport-local');
+const { SESSION_SECRET } = require('../config/sessionConfig.js')
+const jwt = require('jsonwebtoken')
 async function controllerSetup(){
     const userController = new userContainerDB();
     await userController.setUp();
@@ -19,7 +21,7 @@ function registerUser(req, res){
     if(req.body.password1 === req.body.password2){
         const user = {
             email: req.body.username,
-            password: req.body.password1
+            password: jwt.sign(req.body.password1, SESSION_SECRET)
         }
         userController.then((container)=>{
             container.getItemByEmail(user.email).then((userFound)=>{
@@ -57,7 +59,8 @@ passport.use('local-login', new LocalStrategy(
     (username, password, done) => {
         userController.then((container)=> {
             container.getItemByEmail(username).then((user)=>{
-                if (user?.password !== password) {
+                const originalPassword = jwt.verify(user?.password, SESSION_SECRET)
+                if (password !== originalPassword) {
                     return done(null, false)
                 }
                 done(null, user)
