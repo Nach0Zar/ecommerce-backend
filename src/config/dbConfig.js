@@ -23,4 +23,12 @@ dbConfig.schema.hasTable('messages').then( async exists => {
         })
     }
 })
+const mongoDBConfig = "mongodb+srv://nachocoderhouse:passwordpassword@cluster0.hmqkdpj.mongodb.net/coderhouse";
+const mongoDBName = "coderhouse"
+const { MongoClient } = require('mongodb');
+const mongoClient = new MongoClient(mongoDBConfig);
+await mongoClient.connect();
+const mongoDatabase = mongoClient.db(mongoDBName)
+
 exports.dbConfig = dbConfig;
+exports.mongoDatabase = mongoDatabase;

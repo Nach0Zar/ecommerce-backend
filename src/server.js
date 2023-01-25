@@ -1,10 +1,10 @@
 const express = require('express');
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
+//const MongoStore = require('connect-mongo');
 const { routerApi } = require("./routers/routerApi.js");
 //const { routerWeb } = require("./routers/routerWeb.js");
 //const { engine } = require('express-handlebars');
-const { ejs } = require('ejs')
+//const { ejs } = require('ejs')
 const { Server: HttpServer } = require('http');
 const { Server: IOServer } = require('socket.io');
 const { messageContainer } = require('./controllers/controllerMessages.js');
@@ -43,6 +43,7 @@ app.use(express.static('public'));
 app.use(cookieParser())
 //mongo
 app.use(session({
+    //mongo sessions
     // store: MongoStore.create({
     //     mongoUrl: `mongodb+srv://nachocoderhouse:passwordpassword@cluster0.hmqkdpj.mongodb.net/coderhouse`,
     //     ttl: 60 * 10
@@ -50,7 +51,7 @@ app.use(session({
     cookie: {
         httpOnly: false,
         secure: false,
-        maxAge: 60*10
+        maxAge: 60 * 10
     },
     secret: SESSION_SECRET,
     resave: false,
@@ -95,6 +96,7 @@ app.post('/api/register',(req, res)=>{
         }
         user.id = randomUUID();
         users[user.username] = user;
+
         res.status(201).redirect('/');
     }
     else{
