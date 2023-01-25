@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+</head>
+<body>
+    <br>
+    <div id="formHandler">
+        <h2>Enter User data</h2>
+        <br>
+        <form action="/api/login" method="post" id="loginForm">
+            <div class="container" id="formContainer">
+                <div>
+                    <label for="username"><b>Email</b></label>
+                    <input id="emailInput" type="email" name="username" required>
+                </div>
+                <div>
+                    <label for="password"><b>Password</b></label>
+                    <input id="passwordInput" type="password" name="password" required>
+                </div>
+                <br>
+                <div id="buttonContainer">
+                    <button id="buttonLogin">Login</button>
+                </div>
+            </div>
+        </form>
+        <br>
+        <div id="buttonContainer">
+            <button id="buttonRegister"><a href="/api/register">Register</a></button>
+        </div>
+        <br>
+    </div>
+</body>
+<style>
+    #formHandler{
+        border-radius: 50px;
+        background-color:grey;
+    }
+    #formContainer{
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: center;
+        vertical-align: center;
+    }
+    #formHandler>*, #formContainer>*{
+        margin: auto auto;
+        display: flex;
+        justify-content: center;
+        vertical-align: center;
+    }
+    #buttonContainer{
+        display: flex;
+        justify-content: center;
+    }
+    .item{
+        display: flex;
+        flex-flow: column nowrap;
+        max-width: 200px;
+        margin: 20px auto;
+    }
+    .imgThumbnail{
+        max-width: 100px;
+        max-height: fit-content;
+    }
+    #buttonRegister > a{
+        text-decoration: none !important;
+    }
+</style>
+</html>

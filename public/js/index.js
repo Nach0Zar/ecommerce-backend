@@ -105,8 +105,8 @@ const loginForm = document.getElementById('loginForm');
 async function sessionData(){
     const session = await fetch('/api/sessionInfo', {method: 'GET'})
     const sessionData = (await session.json())
+    console.log(sessionData)
     if(sessionData.username){
-        console.log(sessionData.username)
         loginForm.hidden = true
         const bienvenidaUsuario = document.getElementById('bienvenidaUsuario')
         bienvenidaUsuario.innerText = "Bienvenido " + sessionData.username
