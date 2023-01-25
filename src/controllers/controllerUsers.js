@@ -42,7 +42,7 @@ function loginUser(req, res) {
     userController.then((container)=>{
         container.getItemByEmail(req.body.username).then((item)=>{
             if(item){
-                res.cookie('email', item.email, {maxAge: 10000})
+                res.cookie('email', item.email, {maxAge: 60 * 10 * 1000})
                 res.status(200).redirect('/')
             }
             else{

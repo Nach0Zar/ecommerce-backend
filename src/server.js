@@ -55,7 +55,7 @@ app.use(session({
     cookie: {
         httpOnly: false,
         secure: false,
-        maxAge: 10 * 60 * 1000
+        expires: 60 * 10 * 1000
     },
     secret: SESSION_SECRET,
     resave: false,
