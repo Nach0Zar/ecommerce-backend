@@ -1,5 +1,5 @@
 const {randomUUID} = require('crypto')
-const {dbConfig} = require('../dbConfig.js');
+const { dbConfig } = require('../config/dbConfig.js');
 class ContainerDB{
     constructor(table) {
         this.client = dbConfig;

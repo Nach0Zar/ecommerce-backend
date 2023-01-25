@@ -22,25 +22,28 @@ routerApi.get('/productos-test', controllerGetProductsFaker);
 // routerApi.get('/productoRandom',controllerGetRandomProduct);
 routerApi.get('/messages',controllerGetAllMessages);
 routerApi.post('/messages',controllerPostMessage);
-routerApi.post('/login',(req, res)=>{
-    req.session.username = req.body.username
-    res.status(200)
-    res.redirect('/')
-})
-routerApi.post('/logout',(req, res)=>{
-    req.session.destroy(err => {
-        if (!err) res.status(200)
-        else res.status(500)
-    })
-    res.redirect('/')
-})
 routerApi.get('/sessionInfo',(req, res)=>{
-    if(req.session.username){
-        res.json(req.session)
+    if(req.cookies.email){
+        res.json({username: req.cookies.email})
     }
     else{
         res.json({username: null})
     }
     res.status(200)
-})
+});
+routerApi.get('/login',(req, res)=>{
+    res.render('login', {}, (err, html) => {
+        (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
+    });
+});
+routerApi.get('/register',(req, res)=>{
+    res.render('register', {}, (err, html) => {
+        (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
+    });
+});
+routerApi.get('/error', (req, res)=>{
+    res.render('error', {}, (err, html) => {
+        (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
+    });
+});
 exports.routerApi = routerApi;

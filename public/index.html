@@ -17,17 +17,14 @@
             <h2>Enter User data</h2>
             <br>
             <div class="container" id="formContainer">
-                <div>
-                    <label for="username"><b>Username</b></label>
-                    <input id="usernameInput" type="text" name="username">
-                </div>
-                <div>
-                    <label for="password"><b>Password</b></label>
-                    <input id="passwordInput" type="password" name="password">
-                </div>
                 <div id="buttonContainer">
-                    <button id="buttonLogin">Login</button>
+                    <button id="buttonLogin"><a href="/api/login">Login</a></button>
                 </div>
+                <br>
+                <div id="buttonContainer">
+                    <button id="buttonRegister"><a href="/api/register">Register</a></button>
+                </div>
+                <br>
             </div>
         </div>
     </form>
@@ -39,6 +36,7 @@
             <div id="buttonContainer">
                 <button id="buttonLogout">Logout</button>
             </div>
+            <br>
         </div>
     </form>
     <br>
