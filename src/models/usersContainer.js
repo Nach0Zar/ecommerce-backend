@@ -1,8 +1,12 @@
-const {randomUUID} = require('crypto')
-const { mongoDatabase } = require('../config/dbConfig.js');
+const { randomUUID } = require('crypto')
+const { mongoDBSetup } = require('../config/mongoDBConfig.js');
 const { ObjectID } = require('mongodb');
 class userContainerDB{
     constructor() {
+        this.items = [];
+    }
+    async setUp(){
+        const mongoDatabase = await mongoDBSetup();
         this.items = mongoDatabase.collection("Users");
     }
     async save(object) {
