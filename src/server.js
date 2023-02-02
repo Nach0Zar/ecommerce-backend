@@ -10,12 +10,12 @@ const { Server: IOServer } = require('socket.io');
 const { messageContainer } = require('./controllers/controllerMessages.js');
 const { productContainer } = require('./controllers/controllerProducts.js');
 const app = express();
-const {randomUUID} = require('crypto')
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
 const { SESSION_SECRET } = require('./config/sessionConfig');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
+const config = require('./config/config.js');
 const { 
     serializeUserMongo, 
     deserializeUserMongo, 
