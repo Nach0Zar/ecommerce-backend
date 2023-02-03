@@ -80,4 +80,16 @@ app.use('/api/',routerApi); //to be used in the REST Api version
 const server = httpServer.listen(config.PORT,()=>{
     console.log(`Successfully connected to port ${server.address().port}`)
 });
+app.get('/info',(req, res)=>{
+    res.json({
+        ARGS: config.ARGS,
+        OS: config.OS,
+        NODE_VERSION: config.NODE_VERSION,
+        RSS: config.RSS,
+        PATH: config.PATH,
+        PROCESS_ID: config.PROCESS_ID,
+        PROJECT_FOLDER: config.PROJECT_FOLDER
+    })
+    res.status(200)
+});
 server.on("error", err => console.log(err));
