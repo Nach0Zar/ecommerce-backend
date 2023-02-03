@@ -1,8 +1,6 @@
 const createKnexClient = require('knex');
-const dbConfig = createKnexClient({
-    client: 'mysql2',
-    connection: 'mysql://root:@localhost:3306/coderhouse'
-});
+const { config } = require('./config.js');
+const dbConfig = createKnexClient(config.mysql);
 dbConfig.schema.hasTable('products').then( async exists => {
     if(!exists){
         await dbConfig.schema.createTable('products', table => {

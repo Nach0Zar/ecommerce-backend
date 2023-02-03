@@ -12,10 +12,9 @@ const { productContainer } = require('./controllers/controllerProducts.js');
 const app = express();
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
-const { SESSION_SECRET } = require('./config/sessionConfig');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const config = require('./config/config.js');
+const { config } = require('./config/config.js');
 const { 
     serializeUserMongo, 
     deserializeUserMongo, 
@@ -46,21 +45,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
 app.use(cookieParser());
 //mongo
-app.use(session({
-    //mongo sessions
-    // store: MongoStore.create({
-    //     mongoUrl: `mongodb+srv://nachocoderhouse:passwordpassword@cluster0.hmqkdpj.mongodb.net/coderhouse`,
-    //     ttl: 60 * 10
-    // }),
-    cookie: {
-        httpOnly: false,
-        secure: false,
-        expires: 60 * 10 * 1000
-    },
-    secret: SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false
-}));
+app.use(session(config.SESSION));
 //PASSPORT
 app.use(passport.initialize());
 passport.serializeUser((user, done) => {
@@ -92,8 +77,7 @@ app.set('view engine', 'ejs');
 app.use('/api/',routerApi); //to be used in the REST Api version
 //app.use('/', routerWeb);    //to be used with handlebars
 //server port listener
-const port = 8080;
-const server = httpServer.listen(port,()=>{
+const server = httpServer.listen(config.PORT,()=>{
     console.log(`Successfully connected to port ${server.address().port}`)
 });
 server.on("error", err => console.log(err));
