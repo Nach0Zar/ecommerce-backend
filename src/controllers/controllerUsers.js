@@ -1,7 +1,7 @@
 const userContainerDB = require('../models/usersContainer.js')
 const passport = require('passport');
 const { Strategy: LocalStrategy } = require('passport-local');
-const { SESSION_SECRET } = require('../config/sessionConfig.js')
+const config = require('../config/config.js');
 const jwt = require('jsonwebtoken')
 async function controllerSetup(){
     const userController = new userContainerDB();
@@ -21,7 +21,7 @@ function registerUser(req, res){
     if(req.body.password1 === req.body.password2){
         const user = {
             email: req.body.username,
-            password: jwt.sign(req.body.password1, SESSION_SECRET)
+            password: jwt.sign(req.body.password1, config.SESSION_SECRET)
         }
         userController.then((container)=>{
             container.getItemByEmail(user.email).then((userFound)=>{
