@@ -11,6 +11,7 @@ const { controllerGetAllProducts,
         controllerDeleteProductByID,
         controllerGetProductsFaker
  } = require('../controllers/controllerProducts');
+const { calcularRandoms } = require('../api/calcularRandoms.js');
 const routerApi = express.Router();
 routerApi.get('/productos',controllerGetAllProducts);
 routerApi.get('/productos/:id',controllerGetProductByID);
@@ -46,4 +47,9 @@ routerApi.get('/error', (req, res)=>{
         (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
     });
 });
+routerApi.get('/randoms', async (req, res) => {
+    const { cant = 100_000_000 } = req.query
+    const result = await calcularRandoms(cant)
+    res.json(result)
+})
 exports.routerApi = routerApi;
