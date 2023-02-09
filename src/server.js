@@ -1,5 +1,8 @@
 const express = require('express');
 const session = require('express-session');
+const cluster = require ('cluster');
+const { cpus } = require ('os');
+const { Server } = require('./models/Server.js')
 //const MongoStore = require('connect-mongo');
 const { routerApi } = require("./routers/routerApi.js");
 //const { routerWeb } = require("./routers/routerWeb.js");
@@ -77,9 +80,6 @@ app.set('view engine', 'ejs');
 app.use('/api/',routerApi); //to be used in the REST Api version
 //app.use('/', routerWeb);    //to be used with handlebars
 //server port listener
-const server = httpServer.listen(config.PORT,()=>{
-    console.log(`Successfully connected to port ${server.address().port}`)
-});
 app.get('/info',(req, res)=>{
     res.json({
         ARGS: config.ARGS,
@@ -92,4 +92,28 @@ app.get('/info',(req, res)=>{
     })
     res.status(200)
 });
-server.on("error", err => console.log(err));
+if (config.MODO === 'cluster') {
+    const cantCpus = cpus().length
+    if (cluster.isPrimary) {
+        console.log('modo de ejecucion: CLUSTER')
+        console.log(`proceso primario: pid ${process.pid}`)
+        for (let i = 0; i < cantCpus; i++) {
+            cluster.fork();
+        }
+        cluster.on('exit', () => {
+            cluster.fork();
+        })
+    } else {
+        console.log(`proceso secundario: pid ${process.pid}`)
+        const servidor = new Server(app)
+        async () => {
+            await servidor.conectar({ puerto: config.PORT })
+        }
+    }
+} else {
+    const servidor = new Server(app)
+    async () => {
+        await servidor.conectar({ puerto: config.PORT })
+    }
+    console.log(`Successfully connected to port ${config.PORT}`)
+}

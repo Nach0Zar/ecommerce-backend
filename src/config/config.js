@@ -1,6 +1,6 @@
 require('dotenv').config({path:__dirname+'/../.env'});
 const parseArgs = require('minimist');
-const argv = parseArgs(process.argv.slice(2), { alias: { p: 'port' }, default: { port: 8080 } })
+const argv = parseArgs(process.argv.slice(2), { alias: { p: 'port', m: 'mode' }, default: { port: 8080, mode: 'fork'} })
 const sessionConfig = {
     //mongo sessions
     // store: MongoStore.create({
@@ -18,6 +18,7 @@ const sessionConfig = {
 }
 const config = {
     PORT: argv.port,
+    MODE: argv.mode,
     ARGS: process.argv,
     OS: process.env.OS,
     NODE_VERSION: process.versions.node,
