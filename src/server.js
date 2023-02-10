@@ -1,5 +1,7 @@
 const express = require('express');
 const session = require('express-session');
+const cluster = require ('cluster');
+const { Server } = require('./models/Server.js')
 //const MongoStore = require('connect-mongo');
 const { routerApi } = require("./routers/routerApi.js");
 //const { routerWeb } = require("./routers/routerWeb.js");
@@ -42,7 +44,7 @@ io.on('connection',async (socket)=>{
 //middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use(express.static('public'));
+//app.use(express.static('public'));
 app.use(cookieParser());
 //mongo
 app.use(session(config.SESSION));
@@ -77,12 +79,10 @@ app.set('view engine', 'ejs');
 app.use('/api/',routerApi); //to be used in the REST Api version
 //app.use('/', routerWeb);    //to be used with handlebars
 //server port listener
-const server = httpServer.listen(config.PORT,()=>{
-    console.log(`Successfully connected to port ${server.address().port}`)
-});
 app.get('/info',(req, res)=>{
     res.json({
         ARGS: config.ARGS,
+        CPUS: config.CPUs,
         OS: config.OS,
         NODE_VERSION: config.NODE_VERSION,
         RSS: config.RSS,
@@ -92,4 +92,24 @@ app.get('/info',(req, res)=>{
     })
     res.status(200)
 });
-server.on("error", err => console.log(err));
+console.log(config.MODE)
+if (config.MODE === 'cluster') {
+    if (cluster.isPrimary) {
+        console.log('modo de ejecucion: CLUSTER')
+        console.log(`proceso primario: pid ${process.pid}`)
+        for (let i = 0; i < config.CPUs; i++) {
+            cluster.fork();
+        }
+        cluster.on('exit', () => {
+            cluster.fork();
+        })
+    } else {
+        console.log(`proceso secundario: pid ${process.pid}`)
+        const servidor = new Server(app)
+        servidor.conectar({ puerto: config.PORT })
+    }
+} else {
+    const servidor = new Server(app)
+    servidor.conectar({ puerto: config.PORT })
+    console.log(`Successfully connected to port ${config.PORT}`)
+}
