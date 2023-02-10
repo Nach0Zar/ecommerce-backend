@@ -52,4 +52,7 @@ routerApi.get('/randoms', async (req, res) => {
     const result = await calcularRandoms(cant)
     res.json(result)
 })
+routerApi.get('/', (req, res, next) => {
+    res.send(`[pid: ${process.pid}] peticion recibida!`)
+})
 exports.routerApi = routerApi;
