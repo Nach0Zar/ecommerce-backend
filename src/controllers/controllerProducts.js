@@ -1,5 +1,6 @@
 const { faker } = require('@faker-js/faker');
 faker.locale = 'es'
+const {loggerInfo} = require('../models/Logger.js')
 
 //this is the productContainer using memory and FS
 const ProductContainer = require('../models/productContainer')
@@ -28,6 +29,8 @@ function controllerSetup(){
 // }
 const productContainer = controllerSetup();
 function controllerGetAllProducts (req, response){
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         response.status(200);
         response.json(productContainer.getAll());
@@ -38,6 +41,8 @@ function controllerGetAllProducts (req, response){
     }
 }
 function controllerGetProductByID(req, response){
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         if(+req.params.id){
             const buscado = productContainer.getById(+req.params.id);
@@ -61,6 +66,8 @@ function controllerGetProductByID(req, response){
     }
 }
 function controllerPutProductByID(req, response){
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         if(+req.params.id){
             const buscado = productContainer.getById(+req.params.id);
@@ -90,6 +97,8 @@ function controllerPutProductByID(req, response){
     }
 }
 function controllerGetProductsFaker(req, response){
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     let fakeProducts = []
     for (let i = 0; i < 5; i++){
         let fakeProduct = {
@@ -126,6 +135,8 @@ function controllerGetProductsFaker(req, response){
 //     }
 // }
 function controllerPostProduct(req, response){
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         const item = {
             title: req.body.title,
@@ -143,6 +154,8 @@ function controllerPostProduct(req, response){
     }
 }
 function controllerDeleteProductByID(req, response){
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         if(+req.params.id){
             if(!productContainer.getById(+req.params.id)){

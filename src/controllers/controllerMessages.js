@@ -1,5 +1,6 @@
 const MessageContainer = require('../models/messageContainer')
 const fs = require('fs')
+const {loggerInfo} = require('../models/Logger.js')
 function controllerSetup(){
     let filepath = __dirname+"/../mensajes.txt";
     let iDCounter;
@@ -24,6 +25,8 @@ function controllerSetup(){
 // }
 const messageContainer = controllerSetup();
 function controllerGetAllMessages (req, response){
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         response.status(200);
         response.json(messageContainer.getMessageList());
@@ -34,6 +37,8 @@ function controllerGetAllMessages (req, response){
     }
 }
 async function controllerPostMessage(req, response){
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         const message = {
             author: req.body.author,

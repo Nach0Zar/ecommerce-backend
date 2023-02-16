@@ -3,6 +3,7 @@ const passport = require('passport');
 const { Strategy: LocalStrategy } = require('passport-local');
 const config = require('../config/config.js');
 const jwt = require('jsonwebtoken')
+const {loggerInfo} = require('../models/Logger.js')
 async function controllerSetup(){
     const userController = new userContainerDB();
     await userController.setUp();
@@ -18,6 +19,8 @@ function deserializeUserMongo(id, done){
     done(null, user)
 }
 function registerUser(req, res){
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     if(req.body.password1 === req.body.password2){
         const user = {
             email: req.body.username,
@@ -41,6 +44,8 @@ function registerUser(req, res){
     }
 }
 function loginUser(req, res) {
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     userController.then((container)=>{
         container.getItemByEmail(req.body.username).then((item)=>{
             if(item){

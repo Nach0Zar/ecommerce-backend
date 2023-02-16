@@ -13,6 +13,7 @@ const { controllerGetAllProducts,
  } = require('../controllers/controllerProducts');
 const { calcularRandoms } = require('../api/calcularRandoms.js');
 const routerApi = express.Router();
+const {loggerInfo} = require('../models/Logger.js')
 routerApi.get('/productos',controllerGetAllProducts);
 routerApi.get('/productos/:id',controllerGetProductByID);
 routerApi.post('/productos',controllerPostProduct);
@@ -24,6 +25,8 @@ routerApi.get('/productos-test', controllerGetProductsFaker);
 routerApi.get('/messages',controllerGetAllMessages);
 routerApi.post('/messages',controllerPostMessage);
 routerApi.get('/sessionInfo',(req, res)=>{
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     if(req.cookies.email){
         res.json({username: req.cookies.email})
     }
@@ -33,26 +36,36 @@ routerApi.get('/sessionInfo',(req, res)=>{
     res.status(200)
 });
 routerApi.get('/login',(req, res)=>{
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     res.render('login', {}, (err, html) => {
         (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
     });
 });
 routerApi.get('/register',(req, res)=>{
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     res.render('register', {}, (err, html) => {
         (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
     });
 });
 routerApi.get('/error', (req, res)=>{
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     res.render('error', {}, (err, html) => {
         (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
     });
 });
 routerApi.get('/randoms', async (req, res) => {
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     const { cant = 100_000_000 } = req.query
     const result = await calcularRandoms(cant)
     res.json(result)
 })
 routerApi.get('/', (req, res, next) => {
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     res.send(`[pid: ${process.pid}] peticion recibida!`)
 })
 exports.routerApi = routerApi;
