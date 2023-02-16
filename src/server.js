@@ -17,6 +17,7 @@ const io = new IOServer(httpServer);
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const { config } = require('./config/config.js');
+const compression = require('compression')
 const { 
     serializeUserMongo, 
     deserializeUserMongo, 
@@ -92,7 +93,19 @@ app.get('/info',(req, res)=>{
     })
     res.status(200)
 });
-console.log(config.MODE)
+app.get('/infozip', compression(), (req, res)=>{
+    res.json({
+        ARGS: config.ARGS,
+        CPUS: config.CPUs,
+        OS: config.OS,
+        NODE_VERSION: config.NODE_VERSION,
+        RSS: config.RSS,
+        PATH: config.PATH,
+        PROCESS_ID: config.PROCESS_ID,
+        PROJECT_FOLDER: config.PROJECT_FOLDER
+    })
+    res.status(200)
+});
 if (config.MODE === 'cluster') {
     if (cluster.isPrimary) {
         console.log('modo de ejecucion: CLUSTER')
