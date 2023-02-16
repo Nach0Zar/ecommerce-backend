@@ -17,6 +17,8 @@ const io = new IOServer(httpServer);
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const { config } = require('./config/config.js');
+const compression = require('compression')
+const {loggerInfo, loggerWarn, loggerError} = require('./models/Logger.js')
 const { 
     serializeUserMongo, 
     deserializeUserMongo, 
@@ -80,6 +82,7 @@ app.use('/api/',routerApi); //to be used in the REST Api version
 //app.use('/', routerWeb);    //to be used with handlebars
 //server port listener
 app.get('/info',(req, res)=>{
+    loggerInfo(`Ruta ${method} ${url} implementada`)
     res.json({
         ARGS: config.ARGS,
         CPUS: config.CPUs,
@@ -92,7 +95,26 @@ app.get('/info',(req, res)=>{
     })
     res.status(200)
 });
-console.log(config.MODE)
+app.get('/infozip', compression(), (req, res)=>{
+    loggerInfo(`Ruta ${method} ${url} implementada`)
+    res.json({
+        ARGS: config.ARGS,
+        CPUS: config.CPUs,
+        OS: config.OS,
+        NODE_VERSION: config.NODE_VERSION,
+        RSS: config.RSS,
+        PATH: config.PATH,
+        PROCESS_ID: config.PROCESS_ID,
+        PROJECT_FOLDER: config.PROJECT_FOLDER
+    })
+    res.status(200)
+});
+app.all('*', (req, res)=>{
+    const { url, method } = req
+    loggerWarn(`Ruta ${method} ${url} no implementada`)
+    res.send(`Ruta ${method} ${url} no está implementada`)
+    res.status(404)
+})
 if (config.MODE === 'cluster') {
     if (cluster.isPrimary) {
         console.log('modo de ejecucion: CLUSTER')
@@ -113,3 +135,4 @@ if (config.MODE === 'cluster') {
     servidor.conectar({ puerto: config.PORT })
     console.log(`Successfully connected to port ${config.PORT}`)
 }
+app.on('error', error => loggerError(`Error en servidor: ${error}`))
