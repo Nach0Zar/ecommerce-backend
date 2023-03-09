@@ -1,59 +1,58 @@
 const { faker } = require('@faker-js/faker');
 faker.locale = 'es'
 const {loggerInfo} = require('../models/Logger.js')
-
-//this is the productContainer using memory and FS
-const ProductContainer = require('../models/productContainer')
-const fs = require('fs')
-function controllerSetup(){
-    let filepath = __dirname+"/../productos.txt";
-    let iDCounter;
-    let items;
-    //if file doesn't exists or if it is empty
-    if(!fs.existsSync(filepath) || fs.readFileSync(filepath,'utf8').length == 0){
-        iDCounter = 0;
-        items = [];
-    }
-    else{
-        //loads previous items to the list
-        items = JSON.parse(fs.readFileSync(filepath,'utf8'))
-        //gets the highest ID and assigns the counter that value+1 to be the next ID to assign.
-        iDCounter = Math.max(...items.map(item => item.id))+1;
-    }
-    return new ProductContainer(filepath, fs, items, iDCounter);
-}
-// const ContainerDB = require("../models/ContainerDB");
-// //this is the productContainer using DB
-// function controllerSetup(){
-//     return new ContainerDB('products');
-// }
-const productContainer = controllerSetup();
-function controllerGetAllProducts (req, response){
+const { serviceGetAllProducts, 
+        serviceGetProductByID,
+        servicePutProductByID, 
+        serviceGetProductsFaker,
+        servicePostProduct,
+        serviceDeleteProductByID
+ } = require('../services/productsService.js')
+async function controllerGetAllProducts (req, response){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
+        let products = await serviceGetAllProducts();
         response.status(200);
-        response.json(productContainer.getAll());
+        response.json(products);
     }
     catch{
         response.status(500);      
         response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
 }
-function controllerGetProductByID(req, response){
+async function controllerGetProductByID(req, response){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         if(+req.params.id){
-            const buscado = productContainer.getById(+req.params.id);
-            if(!buscado){    
-                response.status(404);      
-                response.json({ mensaje: `no se encontró el producto con el id ${req.params.id}` });
+            let buscado = await serviceGetProductByID(+req.params.id)
+            response.status(200);
+            response.json(buscado);
+        }
+        else{
+            response.status(404);      
+            response.json({ mensaje: `el id ${req.params.id} es inválido` });
+        }
+    }
+    catch(error){
+        response.status(500);      
+        response.json({ mensaje: `${error}` });
+    }
+}
+async function controllerPutProductByID(req, response){
+    const { url, method } = req
+    loggerInfo(`Ruta ${method} ${url} implementada`)
+    try{
+        if(+req.params.id){
+            const item = {
+                title: req.body.title,
+                price: +req.body.price,
+                thumbnail: req.body.thumbnail
             }
-            else{
-                response.status(200);
-                response.json(buscado);
-            }
+            await servicePutProductByID(+req.params.id, item);
+            response.status(200);
+            response.json(item);
         }
         else{
             response.status(404);      
@@ -65,50 +64,8 @@ function controllerGetProductByID(req, response){
         response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
 }
-function controllerPutProductByID(req, response){
-    const { url, method } = req
-    loggerInfo(`Ruta ${method} ${url} implementada`)
-    try{
-        if(+req.params.id){
-            const buscado = productContainer.getById(+req.params.id);
-            if(!buscado){    
-                response.status(404);      
-                response.json({ mensaje: `no se encontró el producto con el id ${req.params.id}` });
-            }
-            else{
-                const item = {
-                    title: req.body.title,
-                    price: +req.body.price,
-                    thumbnail: req.body.thumbnail
-                }
-                productContainer.modifyByID(+req.params.id, item)
-                response.status(200);
-                response.json(req.body);
-            }
-        }
-        else{
-            response.status(404);      
-            response.json({ mensaje: `el id ${req.params.id} es inválido` });
-        }
-    }
-    catch{
-        response.status(500);      
-        response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
-    }
-}
-function controllerGetProductsFaker(req, response){
-    const { url, method } = req
-    loggerInfo(`Ruta ${method} ${url} implementada`)
-    let fakeProducts = []
-    for (let i = 0; i < 5; i++){
-        let fakeProduct = {
-            title: faker.word.noun(),
-            price: +faker.datatype.number(),
-            thumbnail: faker.internet.domainName(),
-            id: i
-        };
-        fakeProducts.push(fakeProduct)
-    }
+async function controllerGetProductsFaker(req, response){
+    let fakeProducts = serviceGetProductsFaker();
     response.status(200);
     response.json(fakeProducts);
 }
@@ -134,7 +91,7 @@ function controllerGetProductsFaker(req, response){
 //         response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
 //     }
 // }
-function controllerPostProduct(req, response){
+async function controllerPostProduct(req, response){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
@@ -143,7 +100,7 @@ function controllerPostProduct(req, response){
             price: +req.body.price,
             thumbnail: req.body.thumbnail
         }
-        productContainer.save(item)
+        await servicePostProduct(item)
         //response.sendStatus(200) just sends status code
         response.status(200);
         response.json({mensaje: `el item ${req.body.title} fue agregado.`}) 
@@ -153,20 +110,13 @@ function controllerPostProduct(req, response){
         response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
 }
-function controllerDeleteProductByID(req, response){
+async function controllerDeleteProductByID(req, response){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         if(+req.params.id){
-            if(!productContainer.getById(+req.params.id)){
-                response.status(404);      
-                response.json({ mensaje: `no se encontró el producto con el id ${req.params.id}` });
-            } 
-            else{   
-                productContainer.deleteById(req.params.id);
-                response.status(200);    
-                response.json({mensaje: `el item con el id ${req.params.id} fue eliminado.`}) 
-            }
+            await serviceDeleteProductByID(req.params.id);
+            response.status(200).json({mensaje: `El item con id ${req.params.id} fue eliminado correctamente`})
         }
         else{
             response.status(404);      
@@ -186,4 +136,3 @@ exports.controllerPutProductByID = controllerPutProductByID;
 exports.controllerPostProduct = controllerPostProduct;
 exports.controllerDeleteProductByID = controllerDeleteProductByID;
 exports.controllerGetProductsFaker = controllerGetProductsFaker;
-exports.productContainer = productContainer;
