@@ -1,35 +1,14 @@
-const MessageContainer = require('../models/messageContainer')
-const fs = require('fs')
 const {loggerInfo} = require('../models/Logger.js')
-function controllerSetup(){
-    let filepath = __dirname+"/../mensajes.txt";
-    let iDCounter;
-    let items;
-    //if file doesn't exists or if it is empty
-    if(!fs.existsSync(filepath) || fs.readFileSync(filepath,'utf8').length == 0){
-        iDCounter = 0;
-        items = [];
-    }
-    else{
-        //loads previous items to the list
-        items = JSON.parse(fs.readFileSync(filepath,'utf8'))
-        //gets the highest ID and assigns the counter that value+1 to be the next ID to assign.
-        iDCounter = Math.max(...items.map(item => item.id))+1;
-    }
-    return new MessageContainer(filepath, fs, items, iDCounter);
-}
-// const ContainerDB = require("../models/ContainerDB");
-// //this is the messageContainer using DB
-// function controllerSetup(){
-//     return new ContainerDB('messages');
-// }
-const messageContainer = controllerSetup();
-function controllerGetAllMessages (req, response){
+const { serviceGetMessageList,
+        servicePostMessage
+} = require('../services/messagesService.js');
+async function controllerGetAllMessages (req, response){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
+        let messageList = await serviceGetMessageList();
         response.status(200);
-        response.json(messageContainer.getMessageList());
+        response.json(messageList);
     }
     catch{
         response.status(500);      
@@ -45,7 +24,7 @@ async function controllerPostMessage(req, response){
             message: req.body.text,
             dateMsg: new Date().toLocaleString()
         }
-        await messageContainer.save(message);
+        await servicePostMessage(message);
         response.status(200);
         response.redirect('/');
     }
@@ -56,4 +35,3 @@ async function controllerPostMessage(req, response){
 }
 exports.controllerGetAllMessages = controllerGetAllMessages;
 exports.controllerPostMessage = controllerPostMessage;
-exports.messageContainer = messageContainer;

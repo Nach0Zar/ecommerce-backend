@@ -9,8 +9,8 @@ const { routerApi } = require("./routers/routerApi.js");
 //const { ejs } = require('ejs')
 const { Server: HttpServer } = require('http');
 const { Server: IOServer } = require('socket.io');
-const { messageContainer } = require('./controllers/controllerMessages.js');
-const { productContainer } = require('./controllers/controllerProducts.js');
+const { messageContainer } = require('./services/messagesService.js');
+const { productContainer } = require('./services/productsService.js');
 const app = express();
 const httpServer = new HttpServer(app);
 const io = new IOServer(httpServer);
@@ -20,10 +20,11 @@ const { config } = require('./config/config.js');
 const compression = require('compression')
 const {loggerInfo, loggerWarn, loggerError} = require('./models/Logger.js')
 const { 
-    serializeUserMongo, 
-    deserializeUserMongo, 
     registerUser,
     loginUser } = require('./controllers/controllerUsers.js')
+const { 
+    serializeUserMongo, 
+    deserializeUserMongo } = require('./services/usersService.js')
 //socket.io
 io.on('connection',async (socket)=>{
     let messages = await messageContainer.getAll();
