@@ -5,4 +5,5 @@ export default class Message {
         this.message = message;
         this.id = id;
     }
+    //in this example it is the same the DTO and the BO, but this is supposed to be the BO.
 }
