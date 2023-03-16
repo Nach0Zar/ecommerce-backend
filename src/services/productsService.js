@@ -1,31 +1,8 @@
 const { faker } = require('@faker-js/faker');
 faker.locale = 'es'
-//this is the productContainer using memory and FS
-const ProductContainer = require('../models/productContainer')
-const fs = require('fs')
-function controllerSetup(){
-    let filepath = __dirname+"/../productos.txt";
-    let iDCounter;
-    let items;
-    //if file doesn't exists or if it is empty
-    if(!fs.existsSync(filepath) || fs.readFileSync(filepath,'utf8').length == 0){
-        iDCounter = 0;
-        items = [];
-    }
-    else{
-        //loads previous items to the list
-        items = JSON.parse(fs.readFileSync(filepath,'utf8'))
-        //gets the highest ID and assigns the counter that value+1 to be the next ID to assign.
-        iDCounter = Math.max(...items.map(item => item.id))+1;
-    }
-    return new ProductContainer(filepath, fs, items, iDCounter);
-}
-// const ContainerDB = require("../models/ContainerDB");
-// //this is the productContainer using DB
-// function controllerSetup(){
-//     return new ContainerDB('products');
-// }
-const productContainer = controllerSetup();
+const { container } = require('../containers/productFactory');
+
+const productContainer = container;
 async function serviceGetAllProducts (){
     return productContainer.getAll();
 }
