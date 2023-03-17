@@ -23,6 +23,7 @@ const config = {
     CPUs: cpus().length,
     ARGS: process.argv,
     OS: process.env.OS,
+    PERSISTENCY: process.env.PERSISTENCY,
     NODE_VERSION: process.versions.node,
     PATH: process.cwd(),
     RSS: process.memoryUsage().rss,

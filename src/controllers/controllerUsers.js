@@ -17,6 +17,7 @@ async function loginUser(req, res) {
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         await serviceLoginUser(req.body.username)
+        res.cookie('email', req.body.username, {maxAge: 60 * 10 * 1000})
         res.status(200).redirect('/')
     }
     catch(error){
