@@ -1,10 +1,11 @@
-const { container } = require('../containers/messageFactory.js')
-const messageContainer = container;
+const { messageRepository } = require('../repositories/messagesRepository.js')
+
+let messageContainer = messageRepository.getDao();
 function serviceGetMessageList(){
-    return messageContainer.getMessageList();
+    return messageRepository.getMessageList();
 }
 async function servicePostMessage(message){
-    await messageContainer.save(message);
+    await messageRepository.save(message);
 }
 exports.serviceGetMessageList = serviceGetMessageList;
 exports.servicePostMessage = servicePostMessage;

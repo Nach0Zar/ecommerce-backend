@@ -38,5 +38,5 @@ class MessageContainerFactory{
     }
 }
 
-let container = MessageContainerFactory.getInstance();
+let container = MessageContainerFactory.getInstance().container;
 exports.container = container;

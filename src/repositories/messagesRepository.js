@@ -1,7 +1,8 @@
-const Message = require('../models/Message');
-const container = require('../containers/messageFactory');
+const { Message } = require('../models/Message');
+const { container } = require('../containers/messageFactory');
 
-export class MessagesRepository {
+let instance = null
+class MessagesRepository {
     #dao
     constructor() {
         this.#dao = container
@@ -28,4 +29,16 @@ export class MessagesRepository {
     deleteAll(){
         this.#dao.deleteAll();
     }
+    getDao(){
+        return this.#dao;
+    }
+    static getInstance(){
+        if(!instance){
+            instance = new MessagesRepository();
+        }
+        return instance;
+    }
 }
+
+let messageRepository = MessagesRepository.getInstance();
+exports.messageRepository = messageRepository;

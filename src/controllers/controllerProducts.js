@@ -8,39 +8,39 @@ const { serviceGetAllProducts,
         servicePostProduct,
         serviceDeleteProductByID
  } = require('../services/productsService.js')
-async function controllerGetAllProducts (req, response){
+async function controllerGetAllProducts (req, res){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         let products = await serviceGetAllProducts();
-        response.status(200);
-        response.json(products);
+        res.status(200);
+        res.json(products);
     }
     catch{
-        response.status(500);      
-        response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+        res.status(500);      
+        res.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
 }
-async function controllerGetProductByID(req, response){
+async function controllerGetProductByID(req, res){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         if(+req.params.id){
             let buscado = await serviceGetProductByID(+req.params.id)
-            response.status(200);
-            response.json(buscado);
+            res.status(200);
+            res.json(buscado);
         }
         else{
-            response.status(404);      
-            response.json({ mensaje: `el id ${req.params.id} es inválido` });
+            res.status(404);      
+            res.json({ mensaje: `el id ${req.params.id} es inválido` });
         }
     }
     catch(error){
-        response.status(500);      
-        response.json({ mensaje: `${error}` });
+        res.status(500);      
+        res.json({ mensaje: `${error}` });
     }
 }
-async function controllerPutProductByID(req, response){
+async function controllerPutProductByID(req, res){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
@@ -51,47 +51,47 @@ async function controllerPutProductByID(req, response){
                 thumbnail: req.body.thumbnail
             }
             await servicePutProductByID(+req.params.id, item);
-            response.status(200);
-            response.json(item);
+            res.status(200);
+            res.json(item);
         }
         else{
-            response.status(404);      
-            response.json({ mensaje: `el id ${req.params.id} es inválido` });
+            res.status(404);      
+            res.json({ mensaje: `el id ${req.params.id} es inválido` });
         }
     }
     catch{
-        response.status(500);      
-        response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+        res.status(500);      
+        res.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
 }
-async function controllerGetProductsFaker(req, response){
+async function controllerGetProductsFaker(req, res){
     let fakeProducts = serviceGetProductsFaker();
-    response.status(200);
-    response.json(fakeProducts);
+    res.status(200);
+    res.json(fakeProducts);
 }
-// function controllerGetAmmountOfProducts(req, response){
+// function controllerGetAmmountOfProducts(req, res){
 //     try{
-//         //response.sendStatus(200) just sends status code
-//         response.status(200);    
-//         response.send(productContainer.getLength().toString());
+//         //res.sendStatus(200) just sends status code
+//         res.status(200);    
+//         res.send(productContainer.getLength().toString());
 //     }
 //     catch{
-//         response.status(500); //just sends status code
-//         response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+//         res.status(500); //just sends status code
+//         res.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
 //     }
 // }
-// function controllerGetRandomProduct(req, response){
+// function controllerGetRandomProduct(req, res){
 //     try{
-//         //response.sendStatus(200) just sends status code
-//         response.status(200);    
-//         response.json(productContainer.getRandomProduct());
+//         //res.sendStatus(200) just sends status code
+//         res.status(200);    
+//         res.json(productContainer.getRandomProduct());
 //     }
 //     catch{
-//         response.status(500); //just sends status code
-//         response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+//         res.status(500); //just sends status code
+//         res.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
 //     }
 // }
-async function controllerPostProduct(req, response){
+async function controllerPostProduct(req, res){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
@@ -101,31 +101,31 @@ async function controllerPostProduct(req, response){
             thumbnail: req.body.thumbnail
         }
         await servicePostProduct(item)
-        //response.sendStatus(200) just sends status code
-        response.status(200);
-        response.json({mensaje: `el item ${req.body.title} fue agregado.`}) 
+        //res.sendStatus(200) just sends status code
+        res.status(200);
+        res.json({mensaje: `el item ${req.body.title} fue agregado.`}) 
     }
     catch{
-        response.status(500); //just sends status code
-        response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+        res.status(500); //just sends status code
+        res.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
 }
-async function controllerDeleteProductByID(req, response){
+async function controllerDeleteProductByID(req, res){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         if(+req.params.id){
             await serviceDeleteProductByID(req.params.id);
-            response.status(200).json({mensaje: `El item con id ${req.params.id} fue eliminado correctamente`})
+            res.status(200).json({mensaje: `El item con id ${req.params.id} fue eliminado correctamente`})
         }
         else{
-            response.status(404);      
-            response.json({ mensaje: `el id ${req.params.id} es inválido.` });
+            res.status(404);      
+            res.json({ mensaje: `el id ${req.params.id} es inválido.` });
         }
     }
     catch{
-        response.status(500);      
-        response.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+        res.status(500);      
+        res.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
     }
 }
 exports.controllerGetAllProducts = controllerGetAllProducts;

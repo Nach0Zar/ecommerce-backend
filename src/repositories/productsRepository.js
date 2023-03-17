@@ -1,7 +1,8 @@
-const Product = require('../models/Product');
-const container = require('../containers/productFactory');
+const { Product } = require('../models/Product');
+const { container } = require('../containers/productFactory');
 
-export class ProductsRepository {
+let instance = null;
+class ProductsRepository {
     #dao
     constructor() {
         this.#dao = container
@@ -34,4 +35,13 @@ export class ProductsRepository {
     deleteAll(){
         this.#dao.deleteAll();
     }
+    static getInstance(){
+        if(!instance){
+            instance = new ProductsRepository();
+        }
+        return instance;
+    }
 }
+
+let productRepository = ProductsRepository.getInstance();
+exports.productRepository = productRepository;

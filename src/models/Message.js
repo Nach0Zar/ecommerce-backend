@@ -1,4 +1,4 @@
-export default class Message {
+class Message {
     constructor ({id, author, message, dateMsg}){
         this.dateMsg = dateMsg;
         this.author = author;
@@ -7,3 +7,4 @@ export default class Message {
     }
     //in this example it is the same the DTO and the BO, but this is supposed to be the BO.
 }
+exports.Message = Message;

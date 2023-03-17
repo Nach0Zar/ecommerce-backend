@@ -37,5 +37,5 @@ class ProductContainerFactory{
         return instance;
     }
 }
-let container = ProductContainerFactory.getInstance();
+let container = ProductContainerFactory.getInstance().container;
 exports.container = container;

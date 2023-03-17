@@ -1,4 +1,4 @@
-export default class Product {
+class Product {
     constructor ({id, title, price, thumbnail}){
         this.title = title;
         this.price = +price;
@@ -7,3 +7,4 @@ export default class Product {
     }
     //in this example it is the same the DTO and the BO, but this is supposed to be the BO.
 }
+exports.Product = Product;
