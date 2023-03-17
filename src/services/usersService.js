@@ -17,17 +17,17 @@ function deserializeUserMongo(id, done){
     const user = userController.then((container)=>container.getItemByID(id))
     done(null, user)
 }
-async function serviceRegisterUser(email, password, password2){
+async function serviceRegisterUser(email, password, password2, res){
     if(password === password2){
         const user = {
             email: email,
-            password: jwt.sign(password, config.SESSION_SECRET)
+            password: jwt.sign(password, process.env.SESSION_SECRET)
         }
         userController.then((container)=>{
             container.getItemByEmail(user.email).then((userFound)=>{
                 if(userFound === null){
                     container.save(user).then(()=>{
-                        res.status(201).redirect('/');
+                        return;
                     })
                 }
                 else{
@@ -40,11 +40,11 @@ async function serviceRegisterUser(email, password, password2){
         throw new Error('Error on register')
     }
 }
-async function serviceLoginUser(username) {
+async function serviceLoginUser(username, res) {
     userController.then((container)=>{
         container.getItemByEmail(username).then((item)=>{
             if(item){
-                res.cookie('email', item.email, {maxAge: 60 * 10 * 1000})
+                return
             }
             else{
                 throw new Error("Failed to login")
@@ -58,7 +58,7 @@ passport.use('local-login', new LocalStrategy(
     (username, password, done) => {
         userController.then((container)=> {
             container.getItemByEmail(username).then((user)=>{
-                const originalPassword = jwt.verify(user?.password, SESSION_SECRET)
+                const originalPassword = jwt.verify(user?.password, process.env.SESSION_SECRET)
                 if (password !== originalPassword) {
                     return done(null, false)
                 }
