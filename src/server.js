@@ -4,15 +4,7 @@ const cluster = require ('cluster');
 const { Server } = require('./models/Server.js')
 //const MongoStore = require('connect-mongo');
 const { routerApi } = require("./routers/routerApi.js");
-//const { routerWeb } = require("./routers/routerWeb.js");
-//const { ejs } = require('ejs')
-const { Server: HttpServer } = require('http');
-const { Server: IOServer } = require('socket.io');
-const { messageContainer } = require('./services/messagesService.js');
-const { productContainer } = require('./services/productsService.js');
 const app = express();
-const httpServer = new HttpServer(app);
-const io = new IOServer(httpServer);
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
 const { config } = require('./config/config.js');
@@ -24,25 +16,6 @@ const {
 const { 
     serializeUserMongo, 
     deserializeUserMongo } = require('./services/usersService.js')
-//socket.io
-io.on('connection',async (socket)=>{
-    let messages = await messageContainer.getAll();
-    let cantidades = await messageContainer.getCantidadesCaracteresListas()
-    socket.emit('updateMessages', messages, cantidades);
-    socket.on('newMessage', async(message)=>{
-        await messageContainer.save(message);
-        messages = await messageContainer.getAll();
-        let cantidades = await messageContainer.getCantidadesCaracteresListas()
-        io.sockets.emit('updateMessages', messages, cantidades);
-    });
-    let products = await productContainer.getAll();
-    socket.emit('updateProducts', products);
-    socket.on('newProduct', async (product)=>{
-        await productContainer.save(product);
-        products = await productContainer.getAll();
-        io.sockets.emit('updateProducts', products);
-    });
-});
 //middlewares
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
