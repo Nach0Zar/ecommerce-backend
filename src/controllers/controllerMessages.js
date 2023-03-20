@@ -25,8 +25,7 @@ async function controllerPostMessage(req, response){
             dateMsg: new Date().toLocaleString()
         }
         await servicePostMessage(message);
-        response.status(200);
-        response.redirect('/');
+        response.sendStatus(200);
     }
     catch{
         response.status(500); //just sends status code

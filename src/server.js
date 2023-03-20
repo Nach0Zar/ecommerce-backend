@@ -5,7 +5,6 @@ const { Server } = require('./models/Server.js')
 //const MongoStore = require('connect-mongo');
 const { routerApi } = require("./routers/routerApi.js");
 //const { routerWeb } = require("./routers/routerWeb.js");
-//const { engine } = require('express-handlebars');
 //const { ejs } = require('ejs')
 const { Server: HttpServer } = require('http');
 const { Server: IOServer } = require('socket.io');
@@ -69,18 +68,11 @@ app.post('/api/logout',(req, res)=>{
     //     if (!err) res.status(200)
     //     else res.status(500)
     // })
-    // res.redirect('/')
     res.clearCookie('email')
     res.sendStatus(200)
 });
-//views handlebars
-//app.engine('handlebars', engine());
-//app.set('view engine', 'handlebars');
-//views 
-app.set('view engine', 'ejs');
 //routes
 app.use('/api/',routerApi); //to be used in the REST Api version
-//app.use('/', routerWeb);    //to be used with handlebars
 //server port listener
 app.get('/info',(req, res)=>{
     loggerInfo(`Ruta ${method} ${url} implementada`)
