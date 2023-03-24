@@ -39,7 +39,8 @@ class ProductContainer{
     //getById(number) : Object
     getById(id){
         //creates a new array (with the map function) containing only the IDs from the products, then indexes by ID and returns the item or null if the index was -1
-        let index = this.#items.map((item => item.id)).indexOf(id);
+        let index = this.#items.map((item => item.id)).indexOf(+id);
+        console.log(this.#items)
         return (index !== -1) ? this.#items[index] : null;
     }
     modifyProductById(id, item){
