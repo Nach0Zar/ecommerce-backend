@@ -35,27 +35,6 @@ routerApi.get('/sessionInfo',(req, res)=>{
     }
     res.status(200)
 });
-routerApi.get('/login',(req, res)=>{
-    const { url, method } = req
-    loggerInfo(`Ruta ${method} ${url} implementada`)
-    res.render('login', {}, (err, html) => {
-        (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
-    });
-});
-routerApi.get('/register',(req, res)=>{
-    const { url, method } = req
-    loggerInfo(`Ruta ${method} ${url} implementada`)
-    res.render('register', {}, (err, html) => {
-        (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
-    });
-});
-routerApi.get('/error', (req, res)=>{
-    const { url, method } = req
-    loggerInfo(`Ruta ${method} ${url} implementada`)
-    res.render('error', {}, (err, html) => {
-        (err) ? (res.redirect('error'), res.status(500)) : (res.send(html), res.status(200)); 
-    });
-});
 routerApi.get('/randoms', async (req, res) => {
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
