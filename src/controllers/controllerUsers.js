@@ -6,10 +6,10 @@ async function registerUser(req, res){
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
         await serviceRegisterUser(req.body.username, req.body.password1, req.body.password2);
-        res.status(200).redirect('/')
+        res.sendStatus(200);
     }
     catch(error){
-        res.status(500).redirect('/api/error')
+        res.sendStatus(500);
     }
 }
 async function loginUser(req, res) {
@@ -18,10 +18,10 @@ async function loginUser(req, res) {
     try{
         await serviceLoginUser(req.body.username)
         res.cookie('email', req.body.username, {maxAge: 60 * 10 * 1000})
-        res.status(200).redirect('/')
+        res.sendStatus(200);
     }
     catch(error){
-        res.status(500).redirect('/api/error')
+        res.status(500);
     }
 }
 
