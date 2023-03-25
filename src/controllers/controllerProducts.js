@@ -102,7 +102,7 @@ async function controllerPostProduct(req, res){
         }
         await servicePostProduct(item)
         //res.sendStatus(200) just sends status code
-        res.status(200);
+        res.status(201);
         res.json({mensaje: `el item ${req.body.title} fue agregado.`}) 
     }
     catch{
