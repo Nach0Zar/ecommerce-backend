@@ -11,26 +11,14 @@ const { controllerGetAllProducts,
         controllerDeleteProductByID,
         controllerGetProductsFaker
  } = require('../controllers/controllerProducts');
-const { controllerGraphQLGetAllProducts,
-        controllerGraphQLGetProductByID,
-        controllerGraphQLPostProduct,
-        controllerGraphQLPutProductByID,
-        controllerGraphQLDeleteProductByID
-} = require('../controllers/controllerProductsGraphQL');
 const { calcularRandoms } = require('../api/calcularRandoms.js');
 const routerApi = express.Router();
 const {loggerInfo} = require('../models/Logger.js')
-// routerApi.get('/productos',controllerGetAllProducts);
-// routerApi.get('/productos/:id',controllerGetProductByID);
-// routerApi.post('/productos',controllerPostProduct);
-// routerApi.put('/productos/:id',controllerPutProductByID);
-// routerApi.delete('/productos/:id', controllerDeleteProductByID);
-routerApi.get('/productos',controllerGraphQLGetAllProducts);
-routerApi.get('/productos/:id',controllerGraphQLGetProductByID);
-routerApi.post('/productos',controllerGraphQLPostProduct);
-routerApi.put('/productos/:id',controllerGraphQLPutProductByID);
-routerApi.delete('/productos/:id', controllerGraphQLDeleteProductByID);
-routerApi.get('/productos-test', controllerGetProductsFaker);
+routerApi.get('/productos',controllerGetAllProducts);
+routerApi.get('/productos/:id',controllerGetProductByID);
+routerApi.post('/productos',controllerPostProduct);
+routerApi.put('/productos/:id',controllerPutProductByID);
+routerApi.delete('/productos/:id', controllerDeleteProductByID);
 // routerApi.get('/cantidadProductos',controllerGetAmmountOfProducts);
 // routerApi.get('/productoRandom',controllerGetRandomProduct);
 routerApi.get('/messages',controllerGetAllMessages);

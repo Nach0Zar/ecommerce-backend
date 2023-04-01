@@ -1,6 +1,4 @@
-const { faker } = require('@faker-js/faker');
-faker.locale = 'es'
-const {loggerInfo} = require('../models/Logger.js')
+const {loggerInfo, loggerError} = require('../models/Logger.js')
 const { serviceGetAllProducts, 
         serviceGetProductByID,
         servicePutProductByID,
@@ -11,56 +9,38 @@ async function controllerGraphQLGetAllProducts (req, res){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
-        let products = await serviceGetAllProducts();
-        res.status(200);
-        res.json(products);
+        return await serviceGetAllProducts();
     }
-    catch{
-        res.status(500);      
-        res.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+    catch(error){
+        loggerError(error);
+        return null;
     }
 }
 async function controllerGraphQLGetProductByID(req, res){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
-        if(+req.params.id){
-            let buscado = await serviceGetProductByID(+req.params.id)
-            res.status(200);
-            res.json(buscado);
-        }
-        else{
-            res.status(404);      
-            res.json({ mensaje: `el id ${req.params.id} es inválido` });
-        }
+        return await serviceGetProductByID(+req.params.id);
     }
     catch(error){
-        res.status(500);      
-        res.json({ mensaje: `${error}` });
+        loggerError(error);
+        return null;
     }
 }
 async function controllerGraphQLPutProductByID(req, res){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
-        if(+req.params.id){
-            const item = {
-                title: req.body.title,
-                price: +req.body.price,
-                thumbnail: req.body.thumbnail
-            }
-            await servicePutProductByID(+req.params.id, item);
-            res.status(200);
-            res.json(item);
+        const item = {
+            title: req.body.title,
+            price: +req.body.price,
+            thumbnail: req.body.thumbnail
         }
-        else{
-            res.status(404);      
-            res.json({ mensaje: `el id ${req.params.id} es inválido` });
-        }
+        return await servicePutProductByID(+req.params.id, item);
     }
-    catch{
-        res.status(500);      
-        res.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+    catch(error){
+        loggerError(error);
+        return null;
     }
 }
 async function controllerGraphQLPostProduct(req, res){
@@ -72,32 +52,22 @@ async function controllerGraphQLPostProduct(req, res){
             price: +req.body.price,
             thumbnail: req.body.thumbnail
         }
-        await servicePostProduct(item)
-        //res.sendStatus(200) just sends status code
-        res.status(201);
-        res.json({mensaje: `el item ${req.body.title} fue agregado.`}) 
+        return await servicePostProduct(item); 
     }
-    catch{
-        res.status(500); //just sends status code
-        res.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+    catch(error){
+        loggerError(error);
+        return null;
     }
 }
 async function controllerGraphQLDeleteProductByID(req, res){
     const { url, method } = req
     loggerInfo(`Ruta ${method} ${url} implementada`)
     try{
-        if(+req.params.id){
-            await serviceDeleteProductByID(req.params.id);
-            res.status(200).json({mensaje: `El item con id ${req.params.id} fue eliminado correctamente`})
-        }
-        else{
-            res.status(404);      
-            res.json({ mensaje: `el id ${req.params.id} es inválido.` });
-        }
+        return await serviceDeleteProductByID(req.params.id);
     }
-    catch{
-        res.status(500);      
-        res.json({ mensaje: `Hubo un problema interno del servidor, reintentar más tarde.` });
+    catch(error){
+        loggerError(error);
+        return null;
     }
 }
 exports.controllerGraphQLGetAllProducts = controllerGraphQLGetAllProducts;
