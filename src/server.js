@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const cluster = require ('cluster');
 const { Server } = require('./models/Server.js')
+const { graphqlMiddleware } = require('./middleware/graphQLMiddleware.js')
 //const MongoStore = require('connect-mongo');
 const { routerApi } = require("./routers/routerApi.js");
 const app = express();
@@ -21,6 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(express.static('public'));
 app.use(cookieParser());
+app.use('/graphql', graphqlMiddleware);
 //mongo
 app.use(session(config.SESSION));
 //PASSPORT
@@ -32,6 +34,7 @@ passport.deserializeUser((id, done) => {
     deserializeUserMongo(id, done);
 });
 app.use(passport.session());
+ 
 app.post('/api/login',
     passport.authenticate('local-login', { failWithError: true, failureRedirect: '/api/error' }),
     loginUser);
